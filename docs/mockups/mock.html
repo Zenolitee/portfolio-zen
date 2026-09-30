@@ -240,7 +240,7 @@ function frame(now) {
       // lensed image of the far disk: arcs over the top (strong) and under the bottom (thin)
       if (r > RS) {
         const top = y < 0;
-        const rh = RIN + (r - RS * 1.04) * (top ? 2.3 : 6.0);
+        const rh = RIN + (r - RS * 1.04) * (top ? 4.2 : 6.0);
         const w = top ? 0.45 + 0.55 * smooth(0.1, -0.9, y / r) : 0.45 * smooth(0.2, 0.95, y / r);
         const dop = 1 + 0.45 * (-x / r);
         v += disk(rh, Math.atan2(y, x), t) * w * dop * 1.15;
