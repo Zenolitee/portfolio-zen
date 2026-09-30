@@ -26,11 +26,15 @@ test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps
   assert.deepEqual(titles, ['Project Athena', 'Relicore', 'AgentPresence', 'asciify-ps']);
 });
 
-test('every showcase row has a poster and a silent, looping preview that waits for hover', () => {
-  const rows = read('projects/index.html').split('<li class="show-row">').slice(1);
+test('each card has a poster and names its preview; one shared pop-out window plays it', () => {
+  const page = read('projects/index.html');
+  const rows = page.split('<li class="show-row">').slice(1);
   assert.equal(rows.length, 4);
   for (const row of rows) {
     assert.match(row, /<img class="show-poster" src="[^"]+poster\.jpg"/);
-    assert.match(row, /<video class="show-video" src="[^"]+preview\.mp4" muted loop playsinline preload="none"/);
+    assert.match(row, /data-preview="[^"]+preview\.mp4"/);
+    assert.match(row, /data-url="[^"]+"/);
   }
+  assert.equal(page.match(/class="peek"/g).length, 1);
+  assert.match(page, /<video class="peek-video" muted loop playsinline preload="none"><\/video>/);
 });
