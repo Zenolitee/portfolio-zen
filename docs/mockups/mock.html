@@ -178,17 +178,18 @@ function vnoise(x, y) {
 function fbm(x, y) { return 0.55 * vnoise(x, y) + 0.3 * vnoise(x * 2.1, y * 2.1) + 0.15 * vnoise(x * 4.3, y * 4.3); }
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
-const RS = 1.0, RIN = 1.4, ROUT = 4.3, TILT = 0.15, GAIN = 1.9;
+const RS = 1.0, RIN = 1.4, ROUT = 4.3, TILT = 0.15, GAIN = 1.9, SPIN = 2.6;
 
 // disk emission at disk radius rho, with swirling texture at orbital angle phi
 function disk(rho, phi, t) {
   if (rho < RIN - 0.25 || rho > ROUT + 0.6) return 0;
   const base = Math.pow(RIN / rho, 1.6) * smooth(RIN - 0.25, RIN + 0.15, rho) * (1 - smooth(ROUT - 1.2, ROUT + 0.6, rho));
-  const a = phi - t * 0.9 * Math.pow(rho, -1.5);          // Keplerian shear
+  const a = phi - t * SPIN * Math.pow(rho, -1.5);         // Keplerian: inner disk laps outer disk
   const ca = Math.cos(a), sa = Math.sin(a);
-  const bands = 0.55 + 0.45 * Math.sin(rho * 11 + 3.2 * fbm(ca * 1.6 + 5, sa * 1.6 + 5));
+  const bands = 0.5 + 0.5 * Math.sin(rho * 11 + 5.5 * fbm(ca * 2.2 + 5, sa * 2.2 + 5));
   const clumps = fbm(ca * 2.4 * rho * 0.7 + 11, sa * 2.4 * rho * 0.7 + 3);
-  return base * (0.25 + 1.25 * bands * clumps);
+  const c = clumps * clumps * 2.2;                         // sharper clumps = visible motion
+  return base * (0.18 + 1.4 * bands * c);
 }
 
 function resize() {
