@@ -66,13 +66,14 @@ test('shadow is black and photon ring is bright', () => {
   assert.ok(bh.shade(0, -1.035, 4) > 0.5);              // photon ring at the top
 });
 
-test('layout caps the grid at 260 columns and grows the font instead', () => {
+test('layout caps the grid at 380 columns and grows the font instead', () => {
   const huge = layout({ width: 10000, height: 6000, charAspect: 0.6 });
-  assert.equal(huge.cols, 260);
-  assert.ok(huge.fontSize > 60);
+  assert.equal(huge.cols, 380);
+  assert.ok(huge.fontSize > 40);
   const laptop = layout({ width: 1440, height: 900, charAspect: 0.6 });
-  assert.equal(laptop.cols, 260);
-  assert.ok(laptop.cols * laptop.rows <= 260 * 100);
+  assert.equal(laptop.cols, 380);
+  assert.ok(laptop.fontSize < 7, 'laptop characters are under 7px');
+  assert.ok(laptop.cols * laptop.rows <= 380 * 145);
 });
 
 test('layout: desktop fits the whole disk, phone lets it run off the sides', () => {
@@ -80,7 +81,7 @@ test('layout: desktop fits the whole disk, phone lets it run off the sides', () 
   const laptop = layout({ width: 1440, height: 900, charAspect: 0.6 });
   assert.ok(extent * laptop.R <= (laptop.cols * laptop.charAspect) / 2, 'desktop disk fits');
   const phone = layout({ width: 390, height: 844, charAspect: 0.6 });
-  assert.equal(phone.fontSize, 7);
+  assert.equal(phone.fontSize, 5);
   assert.ok(phone.cols < 260);
   assert.ok(extent * phone.R > (phone.cols * phone.charAspect) / 2, 'phone disk runs off the sides');
 });

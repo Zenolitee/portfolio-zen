@@ -133,10 +133,10 @@ export function mount(preEl)               // DOM: sizing, loop, pause/resume
   visible; seamless around the orbit.
 
 ### 6.3 Performance (requirements)
-- Grid capped at **260 columns**; beyond that the font size grows instead (zoom-out and
+- Grid capped at **380 columns** (min font 5px); beyond that the font size grows instead (zoom-out and
   large screens cost the same as a laptop).
 - Cells outside the bounding box (|x| < 5.0, |y| < 2.0) skip the physics.
-- Target ≤ 10 ms per frame at 260×90, 30 fps cap.
+- Target ≤ 10 ms per frame at 380×131, 30 fps cap.
 - Pause when off-screen (IntersectionObserver) or tab hidden (`visibilitychange`).
 - `prefers-reduced-motion: reduce` → render one still frame, no loop.
 - Phones (< 620px): black hole scaled up so the disk may run off the sides; grid still capped.
@@ -177,7 +177,7 @@ GitHub READMEs can't run JavaScript, so the README gets a **pre-rendered animate
   - bounding box: `shade` is 0 outside the box and never clips (edge values ≈ 0);
   - README loop: frame N equals frame 0.
 - **Browser (headless Playwright)**: screenshots of every page at 1440×900 and 390×844; no
-  console errors; no horizontal scroll; frame time ≤ 10 ms at 260×90 and unchanged at 3×
+  console errors; no horizontal scroll; frame time ≤ 10 ms at 380×131 and unchanged at 3×
   viewport; reduced-motion renders a still frame.
 - **Accessibility**: landmarks, visible focus, links keyboard reachable; `--muted` on `--bg`
   is 4.79:1 (≥ 4.5:1 for body text) — keep it at or above that if tokens change.
