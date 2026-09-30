@@ -89,6 +89,24 @@ img { display: block; max-width: 100%; height: auto; }
 .identity { top: 6vh; font-size: clamp(9px, 0.74vw, 12px); font-weight: 600; letter-spacing: 0.43em; text-transform: uppercase; }
 .copyright { bottom: 7vh; font-size: 9px; letter-spacing: 0.08em; color: var(--muted); }
 
+/* cursor trail (js/trail.js): blocks pop in at full strength, then fade */
+.trail-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font: 600 12px/1 var(--mono);
+  color: var(--bg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.trail-block.active { opacity: 1; transition: none; }
+
 /* ---------- inner pages ---------- */
 
 .page { width: min(100% - 32px, 860px); margin: 0 auto; padding: 52px 0 96px; }
