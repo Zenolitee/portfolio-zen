@@ -38,3 +38,11 @@ test('closing the pop-out releases the clip (src removed and load() called)', ()
   assert.match(close, /\bstop\(\)/, 'close() should reset the video through stop()');
   assert.match(js.match(/const stop = [^\n]+/)[0], /removeAttribute\('src'\);.*\.load\(\)/);
 });
+
+test('the script decides on the pop-out with the same media query the CSS uses to stack the cards', () => {
+  const query = '(max-width: 620px), (hover: none)';
+  assert.ok(css.includes(`@media ${query} {`));
+  const js = read('js/showcase.js');
+  assert.ok(js.includes(`matchMedia('${query}')`), 'showcase.js should match the CSS query exactly');
+  assert.doesNotMatch(js, /min-width: 621px/);
+});

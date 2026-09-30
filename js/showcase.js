@@ -2,7 +2,8 @@
 // plays that project's clip. Detail-page clips marked data-autoplay play on their own.
 // Reduced motion keeps everything still (the window shows the poster instead).
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const canPeek = window.matchMedia('(hover: hover) and (min-width: 621px)');   // phones get stacked cards
+// same query as the CSS that stacks the cards (phones, touch screens), so no width falls between them
+const stacked = window.matchMedia('(max-width: 620px), (hover: none)');
 
 const wrap = document.querySelector('.showcase-wrap');
 if (wrap) {
@@ -24,7 +25,7 @@ if (wrap) {
   const stop = () => { video.pause(); video.removeAttribute('src'); video.load(); };
 
   const open = card => {
-    if (!canPeek.matches || card === current) return;
+    if (stacked.matches || card === current) return;
     stop();
     current = card;
     peek.querySelector('.peek-url').textContent = card.dataset.url;
@@ -65,7 +66,7 @@ if (wrap) {
   // or close it once the layout switches to stacked cards (where CSS hides it)
   window.addEventListener('resize', () => {
     if (!current) return;
-    if (canPeek.matches) place(current); else close();
+    if (stacked.matches) close(); else place(current);
   });
 }
 
