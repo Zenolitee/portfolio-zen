@@ -22,6 +22,15 @@ test('the display name is "Zenolite" everywhere (the GitHub handle stays in URLs
 });
 
 test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps, in that order', () => {
-  const titles = [...read('projects/index.html').matchAll(/<div class="card-head"><h2>([^<]+)<\/h2>/g)].map(m => m[1]);
+  const titles = [...read('projects/index.html').matchAll(/<h2 class="show-title">([^<]+)<\/h2>/g)].map(m => m[1]);
   assert.deepEqual(titles, ['Project Athena', 'Relicore', 'AgentPresence', 'asciify-ps']);
+});
+
+test('every showcase row has a poster and a silent, looping preview that waits for hover', () => {
+  const rows = read('projects/index.html').split('<li class="show-row">').slice(1);
+  assert.equal(rows.length, 4);
+  for (const row of rows) {
+    assert.match(row, /<img class="show-poster" src="[^"]+poster\.jpg"/);
+    assert.match(row, /<video class="show-video" src="[^"]+preview\.mp4" muted loop playsinline preload="none"/);
+  }
 });

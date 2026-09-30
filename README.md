@@ -24,8 +24,9 @@ npm run check-links   # every internal link resolves
 ## Add a project
 
 1. Copy `_templates/project.html` to `projects/<slug>.html` and fill in the UPPERCASE placeholders.
-2. Put images in `assets/projects/<slug>/` (cover is shown at 16:10).
-3. Add a card to `projects/index.html`, then run `npm run check-links`.
+2. Put `poster.jpg` (1280×720 still) and `preview.mp4` (short silent clip, 16:9) in `assets/projects/<slug>/`.
+   Encode clips small and web-safe: `ffmpeg -i in.mp4 -vf scale=960:540,fps=25,format=yuv420p -c:v libx264 -crf 28 -an -movflags +faststart preview.mp4`
+3. Copy a `<li class="show-row">` block in `projects/index.html` (the clip plays on hover), then run `npm test`.
 
 Notes work the same way with `_templates/note.html` and `notes.html`.
 

@@ -8,9 +8,10 @@
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/style.css">
+  <script type="module" src="../js/showcase.js"></script>
 </head>
 <body>
-  <div class="page">
+  <div class="page page--wide">
     <nav class="page-nav" aria-label="Site">
       <a href="../index.html">← Home</a>
       <a href="../about.html">About</a>
@@ -20,36 +21,68 @@
     </nav>
     <main>
       <h1 class="page-title">Projects</h1>
-      <ul class="project-grid">
-        <li>
-          <a class="card" href="project-athena.html">
-            <div class="frame"><img src="../assets/projects/project-athena/cover.svg" alt="Project Athena cover" width="1600" height="1000" loading="lazy"></div>
-            <div class="card-head"><h2>Project Athena</h2><span class="card-year">2026</span></div>
-            <p>Discord bot and web dashboard for Black Desert Online Node War rosters.</p>
+      <ol class="showcase">
+        <li class="show-row">
+          <a class="show" href="project-athena.html">
+            <div class="show-media" style="--focus: 50% 40%">
+              <img class="show-poster" src="../assets/projects/project-athena/poster.jpg" alt="Project Athena preview" width="1280" height="720" loading="lazy">
+              <video class="show-video" src="../assets/projects/project-athena/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+            </div>
+            <div class="show-info">
+              <span class="show-index">01</span>
+              <h2 class="show-title">Project Athena</h2>
+              <p>Discord bot and web dashboard for Black Desert Online Node War rosters.</p>
+              <span class="show-meta">2026 · TypeScript · Discord · Supabase</span>
+              <span class="show-cta">View project <span aria-hidden="true">→</span></span>
+            </div>
           </a>
         </li>
-        <li>
-          <a class="card" href="relicore.html">
-            <div class="frame"><img src="../assets/projects/relicore/cover.svg" alt="Relicore cover" width="1600" height="1000" loading="lazy"></div>
-            <div class="card-head"><h2>Relicore</h2><span class="card-year">2026</span></div>
-            <p>Guess where historical museum artifacts come from on a world map.</p>
+        <li class="show-row">
+          <a class="show" href="relicore.html">
+            <div class="show-media" style="--focus: 58% 50%">
+              <img class="show-poster" src="../assets/projects/relicore/poster.jpg" alt="Relicore preview" width="1280" height="720" loading="lazy">
+              <video class="show-video" src="../assets/projects/relicore/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+            </div>
+            <div class="show-info">
+              <span class="show-index">02</span>
+              <h2 class="show-title">Relicore</h2>
+              <p>Guess where historical museum artifacts come from on a world map.</p>
+              <span class="show-meta">2026 · Next.js · TypeScript · MapLibre GL</span>
+              <span class="show-cta">View project <span aria-hidden="true">→</span></span>
+            </div>
           </a>
         </li>
-        <li>
-          <a class="card" href="agent-presence.html">
-            <div class="frame"><img src="../assets/projects/agent-presence/cover.svg" alt="AgentPresence cover" width="1600" height="1000" loading="lazy"></div>
-            <div class="card-head"><h2>AgentPresence</h2><span class="card-year">2026</span></div>
-            <p>Shows which AI coding agent you're using as your Discord status.</p>
+        <li class="show-row">
+          <a class="show" href="agent-presence.html">
+            <div class="show-media" style="--focus: 24% 60%">
+              <img class="show-poster" src="../assets/projects/agent-presence/poster.jpg" alt="AgentPresence preview" width="1280" height="720" loading="lazy">
+              <video class="show-video" src="../assets/projects/agent-presence/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+            </div>
+            <div class="show-info">
+              <span class="show-index">03</span>
+              <h2 class="show-title">AgentPresence</h2>
+              <p>Shows which AI coding agent you're using as your Discord status.</p>
+              <span class="show-meta">2026 · Rust · Discord Rich Presence</span>
+              <span class="show-cta">View project <span aria-hidden="true">→</span></span>
+            </div>
           </a>
         </li>
-        <li>
-          <a class="card" href="asciify-ps.html">
-            <div class="frame"><img src="../assets/projects/asciify-ps/cover.svg" alt="asciify-ps cover" width="1600" height="1000" loading="lazy"></div>
-            <div class="card-head"><h2>asciify-ps</h2><span class="card-year">2026</span></div>
-            <p>Windows desktop app that turns images into coloured ASCII art.</p>
+        <li class="show-row">
+          <a class="show" href="asciify-ps.html">
+            <div class="show-media" style="--focus: 68% 40%">
+              <img class="show-poster" src="../assets/projects/asciify-ps/poster.jpg" alt="asciify-ps preview" width="1280" height="720" loading="lazy">
+              <video class="show-video" src="../assets/projects/asciify-ps/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+            </div>
+            <div class="show-info">
+              <span class="show-index">04</span>
+              <h2 class="show-title">asciify-ps</h2>
+              <p>Windows desktop app that turns images into coloured ASCII art.</p>
+              <span class="show-meta">2026 · Python</span>
+              <span class="show-cta">View project <span aria-hidden="true">→</span></span>
+            </div>
           </a>
         </li>
-      </ul>
+      </ol>
     </main>
     <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
   </div>
