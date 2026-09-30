@@ -181,7 +181,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
 const RS = 1.0, RIN = 1.4, ROUT = 4.3, TILT = 0.12, GAIN = 1.9, SPIN = 2.0;
 // bright clumps orbiting at fixed radii: [radius, starting angle, strength]
 const HOTSPOTS = [[1.7, 0.4, 1.0], [2.3, 2.6, 0.8], [3.0, 4.4, 0.6], [2.0, 5.3, 0.7]];
-const TAU = Math.PI * 2, RREF = 2.0, SHEAR_PERIOD = 8;
+const TAU = Math.PI * 2, RREF = 2.0;   // texture turns at the orbital speed of RREF
 // extent of everything drawn: flat disk to ROUT+0.6, lensed arcs to ~1.9 shadow radii
 const BOX_X = ROUT + 0.7, BOX_Y = 2.0;
 
@@ -198,21 +198,12 @@ function pnoise(x, y, P) {
 function disk(rho, phi, t) {
   if (rho < RIN - 0.25 || rho > ROUT + 0.6) return 0;
   const base = Math.pow(RIN / rho, 1.6) * smooth(RIN - 0.25, RIN + 0.15, rho) * (1 - smooth(ROUT - 1.2, ROUT + 0.6, rho));
-  // Material moves toward -phi and inner orbits run faster (Keplerian). Unbounded shear
-  // would wind the texture into an ever-tighter spiral that reads as rings pouring outward,
-  // so the whole disk turns continuously at a reference rate and only the differential
-  // part runs in two staggered SHEAR_PERIOD cycles, crossfaded so each resets while invisible.
-  const wRef = SPIN * Math.pow(RREF, -1.5), wDiff = SPIN * Math.pow(rho, -1.5) - wRef;
-  let n = 0, wsum = 0;
-  for (let k = 0; k < 2; k++) {
-    const s = t / SHEAR_PERIOD + k * 0.5, cycle = Math.floor(s), f = s - cycle;
-    const w = 1 - Math.abs(2 * f - 1);                        // 0 at reset, 1 mid-cycle
-    const u = (((phi + t * wRef + f * SHEAR_PERIOD * wDiff) / TAU) % 1 + 1) % 1;
-    const seed = cycle * 7.31 + k * 3.7;                      // fresh texture each cycle
-    const nk = 0.65 * pnoise(rho * 4 + seed, u * 36, 36) + 0.35 * pnoise(rho * 8.5 + seed, u * 72, 72);
-    n += w * (nk - 0.5); wsum += w * w;
-  }
-  n = 0.5 + n / Math.sqrt(wsum);                              // keep contrast through the blend
+  // The texture turns rigidly (material moves toward -phi). Any per-radius speed difference
+  // shears clumps into slanted streaks, and slanted streaks sliding along the orbit read as
+  // motion *across* it (barber-pole illusion) — the edge-on sides then seem to spread outward.
+  // Keplerian speed lives only in the hot spots below, which are round and can't do that.
+  const u = (((phi + t * SPIN * Math.pow(RREF, -1.5)) / TAU) % 1 + 1) % 1;
+  const n = 0.65 * pnoise(rho * 4, u * 36, 36) + 0.35 * pnoise(rho * 8.5, u * 72, 72);
   // clumps: only slightly longer along the orbit than across it, so their motion is visible
   let e = base * (0.15 + 1.35 * n * n * 2.6);
   // orbiting hot spots make the spin direction unmistakable
@@ -242,6 +233,38 @@ function resize() {
   for (let i = 0; i < stars.length; i++) stars[i] = Math.random() < 0.012 ? Math.random() : 0;
 }
 
+// brightness of the black hole at screen point (x, y) in shadow radii, before GAIN and stars
+function shade(x, y, t) {
+  // outside the bounding box there is nothing but stars
+  if (Math.abs(x) >= BOX_X || Math.abs(y) >= BOX_Y) return 0;
+  let v = 0;
+  const r = Math.hypot(x, y);
+
+  // lensed image of the far disk: arcs over the top (strong) and under the bottom (thin)
+  if (r > RS) {
+    const top = y < 0;
+    const rh = RIN + (r - RS * 1.04) * (top ? 4.2 : 6.0);
+    const w = top ? 0.45 + 0.55 * smooth(0.1, -0.9, y / r) : 0.45 * smooth(0.2, 0.95, y / r);
+    const dop = 1 + 0.45 * (-x / r);
+    v += disk(rh, Math.atan2(y, x), t) * w * dop * 1.15;
+  }
+
+  // photon ring
+  v += 1.1 * Math.exp(-Math.pow((r - RS * 1.035) / 0.03, 2));
+
+  // flat disk (seen nearly edge-on); far half hidden inside the shadow
+  const dy = y / TILT, rho = Math.hypot(x, dy);
+  if (!(y < 0 && r < RS)) {
+    const dop = 1 + 0.6 * (-x / rho);
+    const wisp = 1 - 0.55 * smooth(2.0, ROUT, rho);          // outer disk thins into streaks
+    v += disk(rho, Math.atan2(dy, x), t) * dop * wisp * (y > 0 ? 1.5 : 1.1);
+  }
+
+  // shadow swallows everything behind it
+  if (r < RS * 0.985 && !(y > 0 && rho < ROUT + 0.6 && rho > RIN - 0.25)) v = 0;
+  return v;
+}
+
 function frame(now) {
   if (!running) return;
   if (now - last < 33) { requestAnimationFrame(frame); return; }
@@ -252,35 +275,7 @@ function frame(now) {
     const y = (j - cy + 0.5) / R;                 // screen y (down +), in shadow radii
     for (let i = 0; i < cols; i++) {
       const x = (i - cx + 0.5) * cw / R;
-      let v = 0;
-      // outside the black hole's bounding box there are only stars: skip the physics
-      if (Math.abs(x) < BOX_X && Math.abs(y) < BOX_Y) {
-      const r = Math.hypot(x, y);
-
-      // lensed image of the far disk: arcs over the top (strong) and under the bottom (thin)
-      if (r > RS) {
-        const top = y < 0;
-        const rh = RIN + (r - RS * 1.04) * (top ? 4.2 : 6.0);
-        const w = top ? 0.45 + 0.55 * smooth(0.1, -0.9, y / r) : 0.45 * smooth(0.2, 0.95, y / r);
-        const dop = 1 + 0.45 * (-x / r);
-        v += disk(rh, Math.atan2(y, x), t) * w * dop * 1.15;
-      }
-
-      // photon ring
-      v += 1.1 * Math.exp(-Math.pow((r - RS * 1.035) / 0.03, 2));
-
-      // flat disk (seen nearly edge-on); far half hidden inside the shadow
-      const dy = y / TILT, rho = Math.hypot(x, dy);
-      if (!(y < 0 && r < RS)) {
-        const dop = 1 + 0.6 * (-x / rho);
-        const wisp = 1 - 0.55 * smooth(2.0, ROUT, rho);          // outer disk thins into streaks
-        v += disk(rho, Math.atan2(dy, x), t) * dop * wisp * (y > 0 ? 1.5 : 1.1);
-      }
-
-      // shadow swallows everything behind it
-      if (r < RS * 0.985 && !(y > 0 && rho < ROUT + 0.6 && rho > RIN - 0.25)) v = 0;
-      }
-
+      let v = shade(x, y, t);
       v *= GAIN;
 
       // background stars (added after GAIN so they stay faint dots)
