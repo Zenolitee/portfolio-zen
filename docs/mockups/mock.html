@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Mock</title>
+<!-- THROWAWAY MOCKUP — not production code. Views switch via #home / #about / #projects / #project -->
+<style>
+  :root {
+    --bg: #0b0b0c; --ink: #e8e6e1; --muted: #7a776f; --line: #26262a; --accent: #f0a45a;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ---------- home ---------- */
+  .landing { position: relative; height: 100svh; overflow: hidden; }
+  #bh { position: absolute; inset: 0; margin: 0; font-family: var(--mono); line-height: 1;
+    white-space: pre; user-select: none; overflow: hidden;
+    background: radial-gradient(ellipse 38% 30% at 50% 50%, #fff1d6 0%, #ffd9a0 20%, #f0dcc0 38%, #bdb6a8 62%, #6f6b63 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .corner { position: absolute; z-index: 2; font-family: var(--mono); font-size: clamp(11px, .9vw, 14px);
+    letter-spacing: .22em; text-transform: uppercase; text-decoration: none; transition: color .18s, transform .18s; }
+  .corner:hover { color: var(--accent); transform: translateY(-2px); }
+  .corner span { margin-left: .6em; letter-spacing: 0; }
+  .tl { top: 6vh; left: 3.3vw; } .tr { top: 6vh; right: 3.4vw; }
+  .bl { bottom: 7vh; left: 3.3vw; } .br { bottom: 7vh; right: 3.4vw; }
+  .identity, .copy { position: absolute; z-index: 2; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); white-space: nowrap; }
+  .identity { top: 6vh; font-size: clamp(9px, .74vw, 12px); letter-spacing: .43em; text-transform: uppercase; font-weight: 600; }
+  .copy { bottom: 7vh; font-size: 9px; letter-spacing: .08em; color: var(--muted); }
+
+  /* ---------- inner pages ---------- */
+  .page { width: min(100% - 40px, 860px); margin: 0 auto; padding: 52px 0 96px; }
+  .pnav { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-bottom: 28px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .pnav a { text-decoration: none; color: var(--muted); }
+  .pnav a:hover, .pnav a.cur { color: var(--ink); }
+  .ptitle { margin: 72px 0 32px; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .lead p { max-width: 620px; font-size: clamp(18px, 2.6vw, 24px); line-height: 1.45; margin: 0 0 16px; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 24px; margin: 40px 0 0; font-size: 13px; }
+  dt { color: var(--muted); } dd { margin: 0; }
+  footer { margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 9px; letter-spacing: .08em; color: var(--muted); }
+
+  /* ---------- projects grid ---------- */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 44px 28px; }
+  .card { text-decoration: none; display: block; }
+  .thumb { aspect-ratio: 16/10; border: 1px solid var(--line); background: #111113; position: relative; overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease; }
+  .thumb::after { content: attr(data-label); position: absolute; inset: 0; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #3d3c39;
+    background: repeating-linear-gradient(135deg, transparent 0 9px, #151518 9px 10px); }
+  .card:hover .thumb { transform: translateY(-3px); border-color: #3a3a40; }
+  .meta { display: flex; justify-content: space-between; margin-top: 14px; }
+  .meta h3 { margin: 0; font-size: 17px; font-weight: 500; letter-spacing: -.015em; transition: color .18s; }
+  .card:hover h3 { color: var(--accent); }
+  .meta span, .tags { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+  .card p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+  /* ---------- project detail ---------- */
+  .dtitle { margin: 72px 0 6px; font-size: clamp(30px, 5vw, 48px); font-weight: 500; letter-spacing: -.04em; line-height: 1.1; }
+  .dsum { color: var(--muted); font-size: 18px; margin: 0; }
+  .hero-img { margin: 44px 0; aspect-ratio: 16/9; }
+  .body p { max-width: 680px; margin: 0 0 16px; }
+  .body h2 { margin: 44px 0 16px; font-size: 20px; font-weight: 500; letter-spacing: -.015em; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 32px 0; }
+  .back { display: inline-block; margin-top: 56px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; text-decoration: none; color: var(--muted); }
+  .back:hover { color: var(--accent); }
+
+  @media (max-width: 620px) {
+    .grid, .pair { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<main class="view" id="v-home">
+  <section class="landing">
+    <pre id="bh" aria-hidden="true"></pre>
+    <p class="identity">Your Name</p>
+    <a class="corner tl" href="#about">About<span>↗</span></a>
+    <a class="corner tr" href="#projects">Projects<span>↗</span></a>
+    <a class="corner bl" href="#notes">Notes<span>↗</span></a>
+    <a class="corner br" href="#contact">Contact<span>↗</span></a>
+    <p class="copy">© 2026 Your Name · Manila</p>
+  </section>
+</main>
+
+<!-- ABOUT -->
+<main class="view" id="v-about"><div class="page">
+  <nav class="pnav"><a href="#home">← Home</a><a class="cur" href="#about">About</a><a href="#projects">Projects</a><a href="#notes">Notes</a><a href="#contact">Contact</a></nav>
+  <h1 class="ptitle">About</h1>
+  <div class="lead">
+    <p>Hi, I’m Your Name — a builder who likes networks, automation, and tools that make the invisible visible.</p>
+    <p>I build things at the edge of infrastructure and AI, and try to make them feel simple.</p>
+  </div>
+  <dl><dt>Based</dt><dd>City, Country</dd><dt>Focus</dt><dd>Networking / Automation / Web</dd><dt>Working on</dt><dd>NW-Helper, Packet Tracer MCP</dd></dl>
+  <footer>© 2026 Your Name</footer>
+</div></main>
+
+<!-- PROJECTS -->
+<main class="view" id="v-projects"><div class="page">
+  <nav class="pnav"><a href="#home">← Home</a><a href="#about">About</a><a class="cur" href="#projects">Projects</a><a href="#notes">Notes</a><a href="#contact">Contact</a></nav>
+  <h1 class="ptitle">Projects</h1>
+  <div class="grid">
+    <a class="card" href="#project"><div class="thumb" data-label="screenshot"></div>
+      <div class="meta"><h3>NW-Helper</h3><span>2026</span></div><p>Network diagnostics, deployed on Railway.</p></a>
+    <a class="card" href="#project"><div class="thumb" data-label="screenshot"></div>
+      <div class="meta"><h3>Packet Tracer MCP</h3><span>2026</span></div><p>AI builds Cisco topologies from plain English.</p></a>
+    <a class="card" href="#project"><div class="thumb" data-label="gif"></div>
+      <div class="meta"><h3>Project Three</h3><span>2025</span></div><p>One-line summary goes here.</p></a>
+    <a class="card" href="#project"><div class="thumb" data-label="screenshot"></div>
+      <div class="meta"><h3>Project Four</h3><span>2025</span></div><p>One-line summary goes here.</p></a>
+  </div>
+  <footer>© 2026 Your Name</footer>
+</div></main>
+
+<!-- PROJECT DETAIL -->
+<main class="view" id="v-project"><div class="page">
+  <nav class="pnav"><a href="#home">← Home</a><a href="#about">About</a><a class="cur" href="#projects">Projects</a><a href="#notes">Notes</a><a href="#contact">Contact</a></nav>
+  <h1 class="dtitle">Packet Tracer MCP</h1>
+  <p class="dsum">Describe a network in plain English; watch it build itself in Cisco Packet Tracer.</p>
+  <dl><dt>Year</dt><dd>2026</dd><dt>Role</dt><dd>Solo — design &amp; build</dd><dt>Stack</dt><dd>MCP · JavaScript · Python</dd><dt>Links</dt><dd><a href="#">GitHub ↗</a> &nbsp; <a href="#">Demo ↗</a></dd></dl>
+  <div class="thumb hero-img" data-label="hero gif / video"></div>
+  <div class="body">
+    <p>Write-up paragraph: the problem, why it was interesting, and what you built. Keep it short and concrete.</p>
+    <h2>How it works</h2>
+    <p>A second section with the technical story — architecture, the hard part, what you learned.</p>
+    <div class="pair"><div class="thumb" data-label="image"></div><div class="thumb" data-label="image"></div></div>
+    <p>Closing paragraph — results, what's next.</p>
+  </div>
+  <a class="back" href="#projects">← All projects</a>
+  <footer>© 2026 Your Name</footer>
+</div></main>
+
+<!-- placeholder for notes/contact in the mock -->
+<main class="view" id="v-notes"><div class="page">
+  <nav class="pnav"><a href="#home">← Home</a><a href="#about">About</a><a href="#projects">Projects</a><a class="cur" href="#notes">Notes</a><a href="#contact">Contact</a></nav>
+  <h1 class="ptitle">Notes</h1><p style="color:var(--muted)">(dated list of writeups — same style as Projects list)</p>
+</div></main>
+<main class="view" id="v-contact"><div class="page">
+  <nav class="pnav"><a href="#home">← Home</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#notes">Notes</a><a class="cur" href="#contact">Contact</a></nav>
+  <h1 class="ptitle">Contact</h1>
+  <dl><dt>Email</dt><dd><a href="#">you@example.com</a></dd><dt>GitHub</dt><dd><a href="#">github.com/Zenolitee ↗</a></dd><dt>LinkedIn</dt><dd><a href="#">linkedin.com/in/… ↗</a></dd></dl>
+</div></main>
+
+<script>
+/* ---------- view switching (mock only) ---------- */
+const views = ['home', 'about', 'projects', 'project', 'notes', 'contact'];
+function route() {
+  const v = views.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
+  document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'v-' + v));
+  window.scrollTo(0, 0);
+  running = v === 'home';
+  if (running) { resize(); requestAnimationFrame(frame); }
+}
+
+/* ---------- ASCII black hole ---------- */
+const pre = document.getElementById('bh');
+const RAMP = ' .·:-=+*#%@';
+let cols = 0, rows = 0, cw = 0.6, R = 10, running = false, last = 0, stars = null;
+
+function hash(x, y) { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); }
+function vnoise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+  return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+}
+function fbm(x, y) { return 0.55 * vnoise(x, y) + 0.3 * vnoise(x * 2.1, y * 2.1) + 0.15 * vnoise(x * 4.3, y * 4.3); }
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+const RS = 1.0, RIN = 1.4, ROUT = 4.3, TILT = 0.15, GAIN = 1.9;
+
+// disk emission at disk radius rho, with swirling texture at orbital angle phi
+function disk(rho, phi, t) {
+  if (rho < RIN - 0.25 || rho > ROUT + 0.6) return 0;
+  const base = Math.pow(RIN / rho, 1.6) * smooth(RIN - 0.25, RIN + 0.15, rho) * (1 - smooth(ROUT - 1.2, ROUT + 0.6, rho));
+  const a = phi - t * 0.9 * Math.pow(rho, -1.5);          // Keplerian shear
+  const ca = Math.cos(a), sa = Math.sin(a);
+  const bands = 0.55 + 0.45 * Math.sin(rho * 11 + 3.2 * fbm(ca * 1.6 + 5, sa * 1.6 + 5));
+  const clumps = fbm(ca * 2.4 * rho * 0.7 + 11, sa * 2.4 * rho * 0.7 + 3);
+  return base * (0.25 + 1.25 * bands * clumps);
+}
+
+function resize() {
+  const fs = Math.max(7, Math.min(11, innerWidth / 175));
+  pre.style.fontSize = fs + 'px';
+  const probe = document.createElement('span'); probe.textContent = 'M'.repeat(100);
+  pre.textContent = ''; pre.appendChild(probe);
+  cw = probe.getBoundingClientRect().width / 100 / fs;   // char width in em
+  pre.textContent = '';
+  cols = Math.ceil(innerWidth / (fs * cw)); rows = Math.ceil(innerHeight / fs);
+  const wEm = cols * cw, hEm = rows;
+  R = Math.min(wEm * 0.095, hEm * 0.15);
+  stars = new Float32Array(cols * rows);
+  for (let i = 0; i < stars.length; i++) stars[i] = Math.random() < 0.012 ? Math.random() : 0;
+}
+
+function frame(now) {
+  if (!running) return;
+  if (now - last < 33) { requestAnimationFrame(frame); return; }
+  last = now;
+  const t = now / 1000, cx = cols / 2, cy = rows / 2;
+  let out = '';
+  for (let j = 0; j < rows; j++) {
+    const y = (j - cy + 0.5) / R;                 // screen y (down +), in shadow radii
+    for (let i = 0; i < cols; i++) {
+      const x = (i - cx + 0.5) * cw / R;
+      const r = Math.hypot(x, y);
+      let v = 0;
+
+      // lensed image of the far disk: arcs over the top (strong) and under the bottom (thin)
+      if (r > RS) {
+        const top = y < 0;
+        const rh = RIN + (r - RS * 1.04) * (top ? 3.0 : 6.0);
+        const w = top ? 0.35 + 0.65 * smooth(0.1, -0.9, y / r) : 0.45 * smooth(0.2, 0.95, y / r);
+        const dop = 1 + 0.45 * (-x / r);
+        v += disk(rh, Math.atan2(-y, x) + (top ? 0 : Math.PI), t) * w * dop * 1.1;
+      }
+
+      // photon ring
+      v += 1.1 * Math.exp(-Math.pow((r - RS * 1.035) / 0.03, 2));
+
+      // flat disk (seen nearly edge-on); far half hidden inside the shadow
+      const dy = y / TILT, rho = Math.hypot(x, dy);
+      if (!(y < 0 && r < RS)) {
+        const dop = 1 + 0.6 * (-x / rho);
+        v += disk(rho, Math.atan2(dy, x), t) * dop * (y > 0 ? 1.5 : 1.1);
+      }
+
+      // shadow swallows everything behind it
+      if (r < RS * 0.985 && !(y > 0 && rho < ROUT + 0.6 && rho > RIN - 0.25)) v = 0;
+
+      // background stars
+      if (v < 0.05) {
+        const s = stars[j * cols + i];
+        if (s) v = 0.08 + 0.12 * (0.5 + 0.5 * Math.sin(t * (1 + s * 3) + s * 40));
+      }
+
+      if (v >= 0.05) v *= GAIN;
+      v = Math.min(1, Math.max(0, v));
+      out += RAMP[Math.min(RAMP.length - 1, Math.floor(Math.pow(v, 0.7) * RAMP.length))];
+    }
+    out += '\n';
+  }
+  pre.textContent = out;
+  requestAnimationFrame(frame);
+}
+
+addEventListener('resize', () => running && resize());
+addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
