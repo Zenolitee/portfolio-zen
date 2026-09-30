@@ -7,9 +7,9 @@ import { snap, CELL } from '../js/trail.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-test('pointer positions snap to the 12px trail grid', () => {
-  assert.equal(CELL, 12);
-  assert.deepEqual([0, 11.9, 12, 47, 399].map(snap), [0, 0, 12, 36, 396]);
+test('pointer positions snap to the 8px trail grid', () => {
+  assert.equal(CELL, 8);
+  assert.deepEqual([0, 7.9, 8, 47, 399].map(snap), [0, 0, 8, 40, 392]);
 });
 
 test('the home page opts into the trail, except over the name and copyright', () => {

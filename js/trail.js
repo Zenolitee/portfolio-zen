@@ -1,14 +1,14 @@
-// Cursor trail: a pool of 20 small blocks that pop up on a 12px grid under the pointer, each
-// in the black hole's black / white / pale-yellow palette with an ASCII glyph, then fade. Runs over [data-trail] areas only; skips
-// links, buttons and [data-trail-ignore]; off for reduced motion and touch-only devices.
+// Cursor trail: a pool of 28 small blocks that pop up on an 8px grid under the pointer, each
+// in the black hole's white / pale-yellow / grey palette with an ASCII glyph, then fade.
+// Runs over [data-trail] areas only; skips links, buttons and [data-trail-ignore]; off for
+// reduced motion and touch-only devices.
 // (After the one on githubuniverse.com.)
-export const CELL = 12;
+export const CELL = 8;
 export const snap = v => CELL * Math.floor(v / CELL);
 
-const POOL = 20;
-// [block, glyph]: warm whites and pale yellows with dark glyphs, plus black blocks with a
-// yellowish glyph that read as dark holes over the bright disk
-const COLORS = [['#fff1d6', '#0b0b0c'], ['#e8e6e1', '#0b0b0c'], ['#ffd9a0', '#0b0b0c'], ['#f0dcc0', '#0b0b0c'], ['#0b0b0c', '#ffd9a0'], ['#0b0b0c', '#fff1d6']];
+const POOL = 28;
+// [block, glyph]: warm whites, pale yellows and greys (all visible on the dark backdrop)
+const COLORS = [['#fff1d6', '#0b0b0c'], ['#e8e6e1', '#0b0b0c'], ['#ffd9a0', '#0b0b0c'], ['#f0dcc0', '#0b0b0c'], ['#bdb6a8', '#0b0b0c'], ['#8d897f', '#fff1d6']];
 const GLYPHS = ['.', ':', '-', '=', '+', '*', '#', '%', '@', '/', '<', '>'];
 const pick = list => list[Math.floor(Math.random() * list.length)];
 
