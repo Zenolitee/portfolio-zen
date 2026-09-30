@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createBlackHole, renderFrame } from '../js/blackhole-core.js';
 
-export const README_GRID = Object.freeze({ cols: 168, rows: 42, charAspect: 0.6, R: 7.6 });
+export const README_GRID = Object.freeze({ cols: 340, rows: 84, charAspect: 0.6, R: 12 });
 export const FRAMES = 90;
 const FONT = 12;                                    // px; one cell is 0.6 x 1 font size
 const CELL_W = FONT * README_GRID.charAspect;
