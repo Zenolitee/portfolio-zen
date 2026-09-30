@@ -9,7 +9,7 @@ if (wrap) {
   const peek = wrap.querySelector('.peek');
   const video = peek.querySelector('.peek-video');
   const poster = peek.querySelector('.peek-poster');
-  let current = null;
+  let current = null, hovered = null, focused = null;
 
   // centre the window over the card, kept inside the row; scale it out of the card's centre
   const place = card => {
@@ -20,8 +20,12 @@ if (wrap) {
     peek.style.setProperty('--origin', `${centre - left}px`);
   };
 
+  // drop the previous clip entirely, so a still-only card never inherits it (or its progress bar)
+  const stop = () => { video.pause(); video.removeAttribute('src'); video.load(); };
+
   const open = card => {
-    if (!canPeek.matches) return;
+    if (!canPeek.matches || card === current) return;
+    stop();
     current = card;
     peek.querySelector('.peek-url').textContent = card.dataset.url;
     peek.querySelector('.peek-caption').innerHTML = card.querySelector('.show-info').innerHTML;
@@ -34,26 +38,29 @@ if (wrap) {
     if (card.dataset.preview && !reduceMotion.matches) { video.src = card.dataset.preview; video.play().catch(() => {}); }
   };
 
-  const close = card => {
-    if (current !== card) return;
+  const close = () => {
     current = null;
     peek.classList.remove('is-open', 'is-playing');
     video.pause();
     video.removeAttribute('src');
   };
 
+  // the window follows whichever card the pointer or focus last moved to; when one lets go,
+  // fall back to the card the other still holds, and close only when neither holds one
+  const release = () => { const card = hovered || focused; if (card) open(card); else close(); };
+
   video.addEventListener('playing', () => peek.classList.add('is-playing'));   // fade in once frames exist
   video.addEventListener('timeupdate', () => peek.style.setProperty('--progress', video.currentTime / video.duration || 0));
 
   for (const card of wrap.querySelectorAll('.show')) {
-    card.addEventListener('mouseenter', () => open(card));
-    card.addEventListener('mouseleave', () => close(card));
-    card.addEventListener('focus', () => open(card));
-    card.addEventListener('blur', () => close(card));
+    card.addEventListener('mouseenter', () => { hovered = card; open(card); });
+    card.addEventListener('mouseleave', () => { hovered = null; release(); });
+    card.addEventListener('focus', () => { focused = card; open(card); });
+    card.addEventListener('blur', () => { focused = null; release(); });
   }
 
   // Escape dismisses the pop-out without moving the pointer or focus (WCAG 1.4.13)
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && current) close(current); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && current) close(); });
 }
 
 for (const video of document.querySelectorAll('video[data-autoplay]')) {
