@@ -18,7 +18,7 @@ test('the display name is "Zenolite" everywhere (the GitHub handle stays in URLs
     const text = read(page).replace(/(https?:\/\/)?[\w.-]*github\.(com|io)[^\s"<]*/gi, '');
     assert.doesNotMatch(text, /Zenolitee/i, `${page} still shows "Zenolitee"`);
   }
-  assert.match(read('index.html'), /<p class="identity">Zenolite<\/p>/);
+  assert.match(read('index.html'), /<p class="identity"[^>]*>Zenolite<\/p>/);
 });
 
 test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps, in that order', () => {
