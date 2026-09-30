@@ -38,7 +38,8 @@ notes.html              Dated index of notes
 notes/<slug>.html       One page per note
 contact.html            Email / GitHub / LinkedIn
 css/style.css           Tokens, layout, typography (shared)
-js/blackhole.js         Black hole: pure renderer core + DOM mount
+js/blackhole-core.js    Black hole: pure renderer (no DOM; shared with the README generator)
+js/blackhole.js         Black hole: DOM mount (sizing, loop, pausing)
 assets/projects/<slug>/ Screenshots / GIFs per project
 _templates/             project.html, note.html to copy
 tools/render-readme-svg.mjs   Generates the README animation (§7)
@@ -71,16 +72,19 @@ GitHub Pages all work with no router.
 - Card = 16:10 image (thin 1px border, no shadow) → title + year (mono) → one-line summary.
 - Hover: image lifts 3px, border brightens, title turns accent. Whole card is the link.
 - Images: `loading="lazy"`, explicit `width`/`height` to avoid layout shift.
-- Seed projects: NW-Helper, Packet Tracer MCP (placeholders until real screenshots).
+- Seed projects (owner's own repos, described only from their READMEs/descriptions): NW-Helper,
+  AgentPresence, asciify-ps, playwright-scout. Placeholder covers until real screenshots.
+  (Packet Tracer MCP was dropped: it is another author's project.)
 
 **Project detail (`projects/<slug>.html`)**
 - Large title, one-line summary, `dl` (Year, Role, Stack, Links), hero image/GIF (16:9),
   write-up with `h2` sub-sections, optional 2-up image pairs, `← All projects` link.
 
 **Notes** — dated list (date · title · one-liner), each linking to `notes/<slug>.html`,
-styled like the reference's notes.
+styled like the reference's notes. Starts empty with a short empty-state line.
 
-**Contact** — `dl` of Email, GitHub, LinkedIn.
+**Contact** — `dl` starting with GitHub only; Email / LinkedIn rows are commented out until
+the owner chooses to publish them.
 
 ## 5. Visual tokens
 
@@ -92,14 +96,17 @@ styled like the reference's notes.
 Body 15px / 1.6. Links underline with 3px offset. Accent used only for hover/focus.
 Visible focus rings (1px outline, 8px offset on corner links). Dark only.
 
-## 6. Black hole renderer (`js/blackhole.js`)
+## 6. Black hole renderer (`js/blackhole-core.js` + `js/blackhole.js`)
 
-ES module with a pure core (no DOM) so the site and the README generator share it:
+A pure core module (no DOM) that the site and the README generator share, plus a thin DOM mount:
 
 ```js
-export function createBlackHole(opts)      // -> { shade(x, y, t), charFor(v) }
+// js/blackhole-core.js
+export function createBlackHole(opts)      // -> { shade(x, y, t), disk, twinkle, loopSeconds, ... }
+export function layout(viewport)           // -> { fontSize, cols, rows, R }
 export function renderFrame(bh, grid, t)   // -> string of rows (pure)
-export function mount(preEl, opts)         // DOM: sizing, loop, pause/resume
+// js/blackhole.js
+export function mount(preEl)               // DOM: sizing, loop, pause/resume
 ```
 
 ### 6.1 Model (screen space, units of shadow radius R)
@@ -142,8 +149,8 @@ GitHub READMEs can't run JavaScript, so the README gets a **pre-rendered animate
 - `tools/render-readme-svg.mjs` (Node, no deps) imports the core from `js/blackhole.js`,
   renders N frames on a ~110×40 grid, and writes `assets/readme/blackhole.svg`.
 - SVG: monospace `<text>` rows per frame; frames stepped with a CSS `@keyframes` animation
-  (`steps`), transparent background, warm off-white text that reads on GitHub's light and dark
-  themes.
+  (`steps`), on its own dark rounded background (warm light text can't read on GitHub's light
+  theme), so it looks the same in both themes.
 - **Seamless loop**: loop length L = one texture revolution; hot-spot speeds rounded to whole
   turns per L in README mode so the last frame flows into the first.
 - Budget: ≤ ~600 KB SVG (≈ 72 frames). If over budget, reduce frames or grid.
