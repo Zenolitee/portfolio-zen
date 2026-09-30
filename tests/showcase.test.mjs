@@ -24,3 +24,10 @@ test('phones and touch-only screens (no hover) get the stacked cards with their 
   assert.match(rules, /\.peek \{ display: none/);
   assert.match(rules, /\.show-info \{/);
 });
+
+test('looping detail-page clips can be paused (WCAG 2.2.2)', () => {
+  for (const slug of ['project-athena', 'relicore']) {
+    const video = read(`projects/${slug}.html`).match(/<video[^>]*data-autoplay[^>]*>/)[0];
+    assert.match(video, /\scontrols[\s>]/, `${slug} hero video needs controls`);
+  }
+});
