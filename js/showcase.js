@@ -41,8 +41,7 @@ if (wrap) {
   const close = () => {
     current = null;
     peek.classList.remove('is-open', 'is-playing');
-    video.pause();
-    video.removeAttribute('src');
+    stop();
   };
 
   // the window follows whichever card the pointer or focus last moved to; when one lets go,

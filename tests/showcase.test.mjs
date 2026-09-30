@@ -31,3 +31,10 @@ test('looping detail-page clips can be paused (WCAG 2.2.2)', () => {
     assert.match(video, /\scontrols[\s>]/, `${slug} hero video needs controls`);
   }
 });
+
+test('closing the pop-out releases the clip (src removed and load() called)', () => {
+  const js = read('js/showcase.js');
+  const close = js.match(/const close = \(\) => \{[\s\S]*?\n  \};/)[0];
+  assert.match(close, /\bstop\(\)/, 'close() should reset the video through stop()');
+  assert.match(js.match(/const stop = [^\n]+/)[0], /removeAttribute\('src'\);.*\.load\(\)/);
+});
