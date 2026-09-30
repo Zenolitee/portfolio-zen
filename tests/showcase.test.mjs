@@ -15,3 +15,12 @@ test('card text stays readable by screen readers on desktop; posters are decorat
   assert.equal(posters.length, 4);
   for (const img of posters) assert.match(img, /alt=""/);
 });
+
+test('phones and touch-only screens (no hover) get the stacked cards with their info shown', () => {
+  const block = css.split('@media (max-width: 620px), (hover: none) {')[1];
+  assert.ok(block, 'expected a "(max-width: 620px), (hover: none)" block');
+  const rules = block.slice(0, block.indexOf('\n}'));
+  assert.match(rules, /\.showcase \{ flex-direction: column/);
+  assert.match(rules, /\.peek \{ display: none/);
+  assert.match(rules, /\.show-info \{/);
+});
