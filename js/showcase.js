@@ -30,7 +30,8 @@ if (wrap) {
     peek.style.setProperty('--progress', 0);
     place(card);
     peek.classList.add('is-open');
-    if (!reduceMotion.matches) { video.src = card.dataset.preview; video.play().catch(() => {}); }
+    // projects without footage (no data-preview) just show their still
+    if (card.dataset.preview && !reduceMotion.matches) { video.src = card.dataset.preview; video.play().catch(() => {}); }
   };
 
   const close = card => {

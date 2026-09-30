@@ -32,9 +32,19 @@ test('each card has a poster and names its preview; one shared pop-out window pl
   assert.equal(rows.length, 4);
   for (const row of rows) {
     assert.match(row, /<img class="show-poster" src="[^"]+poster\.jpg"/);
-    assert.match(row, /data-preview="[^"]+preview\.mp4"/);
     assert.match(row, /data-url="[^"]+"/);
   }
+  // only projects with real footage get a clip; the rest pop out as a still image
+  const withClip = rows.filter(r => /data-preview="[^"]+preview\.mp4"/.test(r)).map(r => r.match(/href="([^"]+)\.html"/)[1]);
+  assert.deepEqual(withClip, ['project-athena', 'relicore']);
   assert.equal(page.match(/class="peek"/g).length, 1);
   assert.match(page, /<video class="peek-video" muted loop playsinline preload="none"><\/video>/);
+});
+
+test('projects without footage show a still image on their detail page, not a video', () => {
+  for (const slug of ['agent-presence', 'asciify-ps']) {
+    const page = read(`projects/${slug}.html`);
+    assert.doesNotMatch(page, /<video/);
+    assert.match(page, new RegExp(`<div class="frame detail-hero"><img src="../assets/projects/${slug}/poster\\.jpg"`));
+  }
 });
