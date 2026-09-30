@@ -51,6 +51,9 @@ if (wrap) {
     card.addEventListener('focus', () => open(card));
     card.addEventListener('blur', () => close(card));
   }
+
+  // Escape dismisses the pop-out without moving the pointer or focus (WCAG 1.4.13)
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && current) close(current); });
 }
 
 for (const video of document.querySelectorAll('video[data-autoplay]')) {
