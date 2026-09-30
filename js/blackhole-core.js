@@ -63,6 +63,8 @@ export function createBlackHole({ loop = false, hotspots = true } = {}) {
     const n = 0.65 * pnoise(rho * 4, u * 36, 36) + 0.35 * pnoise(rho * 8.5, u * 72, 72);
     let e = base * (0.15 + 1.35 * n * n * 2.6);
     for (const s of spots) {
+      // a hot spot only lights a thin ring: beyond 0.45 its term is < 4e-5 (invisible)
+      if (Math.abs(rho - s.r) > 0.45) continue;
       const a = phi + t * s.w - s.a0;
       const da = Math.atan2(Math.sin(a), Math.cos(a)) * s.r;   // arc distance along the orbit
       e += s.s * Math.exp(-(da * da) / 0.35 - ((rho - s.r) ** 2) / 0.02);
@@ -128,7 +130,7 @@ export function charFor(v) {
 
 // Cost is per character, so the grid is capped: past maxCols the font grows instead
 // (zooming out shows bigger characters, not more of them).
-export function layout({ width, height, charAspect, maxCols = 260, minFont = 7 }) {
+export function layout({ width, height, charAspect, maxCols = 380, minFont = 5 }) {
   const fontSize = Math.max(minFont, width / (maxCols * charAspect));
   const cols = Math.min(maxCols, Math.ceil(width / (fontSize * charAspect)));
   const rows = Math.ceil(height / fontSize);
@@ -137,8 +139,19 @@ export function layout({ width, height, charAspect, maxCols = 260, minFont = 7 }
   return { fontSize, cols, rows, R, charAspect };
 }
 
+// the star field only depends on the grid size, so it's computed once per size
+let starCache = { cols: -1, rows: -1, stars: null };
+function starsFor(cols, rows) {
+  if (starCache.cols !== cols || starCache.rows !== rows) {
+    const stars = new Float64Array(cols * rows);
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) stars[j * cols + i] = starAt(i, j);
+    starCache = { cols, rows, stars };
+  }
+  return starCache.stars;
+}
+
 export function renderFrame(bh, { cols, rows, charAspect, R }, t) {
-  const cx = cols / 2, cy = rows / 2, lines = new Array(rows);
+  const cx = cols / 2, cy = rows / 2, lines = new Array(rows), stars = starsFor(cols, rows);
   for (let j = 0; j < rows; j++) {
     const y = (j - cy + 0.5) / R;
     let line = '';
@@ -146,10 +159,10 @@ export function renderFrame(bh, { cols, rows, charAspect, R }, t) {
       const x = ((i - cx + 0.5) * charAspect) / R;
       let v = bh.shade(x, y, t) * PARAMS.GAIN;
       if (v < 0.05) {
-        const s = starAt(i, j);
+        const s = stars[j * cols + i];
         if (s) v = bh.twinkle(s, t);                           // after GAIN so stars stay faint
       }
-      line += charFor(v);
+      line += v <= 0 ? ' ' : charFor(v);                       // most cells are empty space
     }
     lines[j] = line;
   }

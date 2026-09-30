@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
   <rect width="1600" height="1000" fill="#111113"/>
   <g fill="none" stroke="#1f1f24" stroke-width="2"><circle cx="800" cy="500" r="200"/><circle cx="800" cy="500" r="320"/><ellipse cx="800" cy="500" rx="620" ry="80"/></g>
-  <text x="800" y="512" fill="#e8e6e1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="60" letter-spacing="14" text-anchor="middle">PLAYWRIGHT-SCOUT</text>
+  <text x="800" y="512" fill="#e8e6e1" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="60" letter-spacing="14" text-anchor="middle">PROJECT ATHENA</text>
   <text x="800" y="580" fill="#807d75" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" letter-spacing="7" text-anchor="middle">SCREENSHOT SOON</text>
 </svg>
