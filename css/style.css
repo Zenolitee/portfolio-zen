@@ -28,7 +28,8 @@ a:hover { color: var(--accent); }
 :focus-visible { outline: 1px solid var(--accent); outline-offset: 4px; }
 img { display: block; max-width: 100%; height: auto; }
 
-.visually-hidden {
+.visually-hidden,
+.show-info {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -127,28 +128,88 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .site-footer p { margin: 0; }
 
-/* ---------- projects grid ---------- */
+/* ---------- projects showcase ---------- */
 
-.project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 28px; margin: 0; padding: 0; list-style: none; }
-.card { display: block; text-decoration: none; }
-.card:hover { color: inherit; }
-.frame {
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: #111113;
-  color: var(--muted);
+.page--wide { width: min(100% - 32px, 1080px); }
+
+.frame { aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); background: #111113; color: var(--muted); font-size: 12px; }
+.frame img,
+.frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* four equal tall cards; hovering (or focusing) one lights it up and pops out a preview
+   window above the row. Nothing hovered = still, desaturated cards with vertical labels. */
+.showcase-wrap { position: relative; }
+.showcase { --ease: cubic-bezier(0.22, 1, 0.36, 1); display: flex; gap: 10px; height: clamp(440px, 66vh, 620px); margin: 0; padding: 0; list-style: none; }
+.show-row { flex: 1 1 0; min-width: 0; transition: opacity 0.4s ease; }
+.showcase:has(.show:hover) .show-row:not(:has(.show:hover)),
+.showcase:has(.show:focus-visible) .show-row:not(:has(.show:focus-visible)) { opacity: 0.5; }
+
+.show { position: relative; display: block; height: 100%; overflow: hidden; border: 1px solid var(--line); text-decoration: none; transition: border-color 0.4s ease; }
+.show:hover,
+.show:focus-visible { color: inherit; border-color: rgba(240, 164, 90, 0.55); }
+.show-media { position: absolute; inset: 0; background: #111113; }
+.show-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, center); filter: grayscale(0.85) brightness(0.55); transition: filter 0.6s ease; }
+.show:is(:hover, :focus-visible) .show-media img { filter: none; }
+
+/* left-edge shade so the vertical label reads over any poster */
+.show::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, rgba(11, 11, 12, 0.75), rgba(11, 11, 12, 0) 55%); pointer-events: none; }
+.show-label {
+  position: absolute;
+  left: 16px;
+  bottom: 20px;
+  z-index: 2;
+  display: flex;
+  gap: 14px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--mono);
   font-size: 12px;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
 }
-.frame img { width: 100%; height: 100%; object-fit: cover; }
-.card:hover .frame,
-.card:focus-visible .frame { transform: translateY(-3px); border-color: #3a3a40; }
-.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 14px; }
-.card-head h2 { margin: 0; font-size: 17px; font-weight: 500; letter-spacing: -0.015em; transition: color 0.18s ease; }
-.card:hover h2 { color: var(--accent); }
-.card-year { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted); }
-.card p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.show-label span { color: var(--accent); }
+
+/* card text shows in the pop-out on desktop (kept for screen readers via .visually-hidden above);
+   phones and touch screens show it on the card (see small screens) */
+.show-index { display: block; margin-bottom: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--accent); }
+.show-title { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
+.show-info p,
+.peek-caption p { margin: 6px 0 10px; color: #b9b5ac; font-size: 14px; }
+.show-meta { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted); }
+.show-cta { display: block; margin-top: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); }
+.peek-caption .show-cta { display: none; }
+
+/* the pop-out preview window */
+.peek {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 5;
+  width: min(640px, 64%);
+  border: 1px solid rgba(240, 164, 90, 0.35);
+  background: #0e0e10;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.6);
+  pointer-events: none;              /* hover and clicks stay on the card underneath */
+  opacity: 0;
+  transform: translateY(-50%) scale(0.92);
+  transform-origin: var(--origin, 50%) 50%;
+  transition: opacity 0.25s ease, transform 0.45s var(--ease, ease), left 0.45s var(--ease, ease);
+}
+.peek.is-open { opacity: 1; transform: translateY(-50%) scale(1); }
+.peek:not(.is-open) { transition: opacity 0.2s ease, transform 0.3s ease; }   /* no gliding while hidden */
+.peek-bar { display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-bottom: 1px solid var(--line); background: #151518; }
+.peek-bar i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a40; }
+.peek-bar i:first-child { background: var(--accent); }
+.peek-url { margin-left: 10px; overflow: hidden; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+.peek-media { position: relative; aspect-ratio: 16 / 9; background: #111113; }
+.peek-media img,
+.peek-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.peek-media video { opacity: 0; transition: opacity 0.3s ease; }
+.peek.is-playing video { opacity: 1; }
+.peek-media::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: calc(var(--progress, 0) * 100%); background: var(--accent); transition: width 0.3s linear; }
+.peek-caption { padding: 14px 18px 16px; }
 
 /* ---------- project detail ---------- */
 
@@ -173,7 +234,6 @@ img { display: block; max-width: 100%; height: auto; }
 /* ---------- small screens ---------- */
 
 @media (max-width: 620px) {
-  .project-grid,
   .image-pair { grid-template-columns: 1fr; }
   .corner--tl,
   .corner--bl { left: 16px; }
@@ -181,6 +241,18 @@ img { display: block; max-width: 100%; height: auto; }
   .corner--br { right: 16px; }
   .identity { top: calc(6vh + 32px); }
   .copyright { bottom: calc(7vh + 32px); }
+}
+
+/* stacked cards with their info on the card wherever the hover pop-out can't open:
+   phones, and touch tablets/laptops of any width */
+@media (max-width: 620px), (hover: none) {
+  .showcase { flex-direction: column; height: auto; }
+  .show { height: 320px; }
+  .show-label,
+  .show::before,
+  .peek { display: none; }
+  .show-media img { filter: none; }
+  .show-info { width: auto; height: auto; overflow: visible; clip: auto; clip-path: none; white-space: normal; left: 12px; right: 12px; bottom: 12px; z-index: 2; padding: 14px 16px; background: rgba(11, 11, 12, 0.7); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

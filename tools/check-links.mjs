@@ -25,7 +25,7 @@ export function checkLinks(root, base = SITE_BASE) {
   for (const file of htmlFiles(root)) {
     // commented-out markup (e.g. "how to add a note" examples) isn't a link
     const html = readFileSync(file, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
-    for (const [, ref] of html.matchAll(/\b(?:href|src)="([^"]*)"/g)) {
+    for (const [, ref] of html.matchAll(/\b(?:href|src|poster|data-preview)="([^"]*)"/g)) {
       if (ref === '' || /^(#|[a-z][a-z0-9+.-]*:|\/\/)/i.test(ref)) continue;
       const path = ref.split(/[?#]/)[0];
       let target = null;

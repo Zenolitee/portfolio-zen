@@ -36,6 +36,13 @@ test('links inside HTML comments are ignored', () => {
   assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'gone.html' }]);
 });
 
+test('video posters are checked too', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'links-'));
+  writeFileSync(join(dir, 'clip.mp4'), '');
+  writeFileSync(join(dir, 'a.html'), '<video src="clip.mp4" poster="missing.jpg"></video>');
+  assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'missing.jpg' }]);
+});
+
 test('the site has no broken internal links', () => {
   assert.deepEqual(checkLinks(repoRoot), []);
 });
