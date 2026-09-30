@@ -34,7 +34,7 @@ if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pref
     b.textContent = Math.random() < 0.3 ? '' : pick(GLYPHS);
     b.classList.add('active');
     clearTimeout(b.fade);
-    b.fade = setTimeout(() => b.classList.remove('active'), 300 + 500 * Math.random());
+    b.fade = setTimeout(() => b.classList.remove('active'), 150 + 250 * Math.random());
   };
 
   for (const area of document.querySelectorAll('[data-trail]')) area.addEventListener('mousemove', onMove);
