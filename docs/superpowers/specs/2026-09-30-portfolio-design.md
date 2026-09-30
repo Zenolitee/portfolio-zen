@@ -22,7 +22,7 @@ look and the black-hole behaviour are the target).
 | Decision | Choice |
 |---|---|
 | Stack | Plain HTML / CSS / JS. No framework, no build step for the site. |
-| Hosting | GitHub Pages, deployed from `main` (repo root). Public repo `Zenolitee/Portfolio-Website`. |
+| Hosting | GitHub Pages, deployed from `main` (repo root). Repo `Zenolitee/portfolio-zen` (currently private — Pages on a free account needs it public). |
 | Fonts | System stacks only (no web-font downloads). |
 | Workflow | Implementation on a feature branch, merged to `main` through a PR. |
 | Content | Placeholders clearly marked (`Your Name`, bio, links); owner fills in later. |
@@ -155,10 +155,10 @@ GitHub READMEs can't run JavaScript, so the README gets a **pre-rendered animate
 
 ## 8. Repository and delivery
 
-1. Create public repo `Zenolitee/Portfolio-Website`; push `main` (mockup + this spec).
+1. Repo `Zenolitee/portfolio-zen` (created by owner); push `main` (mockup + this spec).
 2. Build on branch `feat/site`; open a PR into `main`.
 3. Enable GitHub Pages (source: `main`, root) after merge; site at
-   `https://zenolitee.github.io/Portfolio-Website/` (custom domain optional, later).
+   `https://zenolitee.github.io/portfolio-zen/` (custom domain optional, later).
    All internal links relative so the sub-path works.
 4. README animation: follow-up branch/PR in the profile repo (§7).
 
@@ -173,7 +173,7 @@ GitHub READMEs can't run JavaScript, so the README gets a **pre-rendered animate
   console errors; no horizontal scroll; frame time ≤ 10 ms at 260×90 and unchanged at 3×
   viewport; reduced-motion renders a still frame.
 - **Accessibility**: landmarks, visible focus, links keyboard reachable; `--muted` on `--bg`
-  is 4.74:1 (≥ 4.5:1 for body text) — keep it at or above that if tokens change.
+  is 4.79:1 (≥ 4.5:1 for body text) — keep it at or above that if tokens change.
 - **Links**: every internal link resolves (simple crawl script against the local server).
 
 ## 10. Out of scope
