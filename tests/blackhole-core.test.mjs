@@ -97,6 +97,19 @@ test('renderFrame returns rows x cols characters from the ramp', () => {
   }
 });
 
+test('no stars inside the shadow', () => {
+  const bh = { ...createBlackHole(), shade: () => 0 };          // stars only
+  const grid = layout({ width: 1440, height: 900, charAspect: 0.6 });
+  const lines = renderFrame(bh, grid, 1.5).split('\n');
+  for (let j = 0; j < grid.rows; j++) {
+    const y = (j - grid.rows / 2 + 0.5) / grid.R;
+    for (let i = 0; i < grid.cols; i++) {
+      const x = ((i - grid.cols / 2 + 0.5) * grid.charAspect) / grid.R;
+      if (Math.hypot(x, y) < PARAMS.RS) assert.equal(lines[j][i], ' ', `star at ${i},${j}`);
+    }
+  }
+});
+
 test('charFor clamps to the ramp ends', () => {
   assert.equal(charFor(-1), ' ');
   assert.equal(charFor(0), ' ');

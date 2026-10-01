@@ -158,7 +158,7 @@ export function renderFrame(bh, { cols, rows, charAspect, R }, t) {
     for (let i = 0; i < cols; i++) {
       const x = ((i - cx + 0.5) * charAspect) / R;
       let v = bh.shade(x, y, t) * PARAMS.GAIN;
-      if (v < 0.05) {
+      if (v < 0.05 && Math.hypot(x, y) >= PARAMS.RS) {        // no stars behind the shadow
         const s = stars[j * cols + i];
         if (s) v = bh.twinkle(s, t);                           // after GAIN so stars stay faint
       }
