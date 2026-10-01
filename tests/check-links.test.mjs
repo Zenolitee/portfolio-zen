@@ -43,6 +43,13 @@ test('video posters are checked too', () => {
   assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'missing.jpg' }]);
 });
 
+test('data-preview clips are checked too', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'links-'));
+  writeFileSync(join(dir, 'clip.mp4'), '');
+  writeFileSync(join(dir, 'a.html'), '<li data-preview="clip.mp4"></li> <li data-preview="missing.mp4"></li>');
+  assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'missing.mp4' }]);
+});
+
 test('the site has no broken internal links', () => {
   assert.deepEqual(checkLinks(repoRoot), []);
 });

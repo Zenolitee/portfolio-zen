@@ -26,7 +26,7 @@ test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps
   assert.deepEqual(titles, ['Project Athena', 'Relicore', 'AgentPresence', 'asciify-ps']);
 });
 
-test('each card has a poster and names its preview; one shared pop-out window plays it', () => {
+test('each card has a poster and a data-url; only cards with footage name a preview; one shared pop-out window', () => {
   const page = read('projects/index.html');
   const rows = page.split('<li class="show-row">').slice(1);
   assert.equal(rows.length, 4);
