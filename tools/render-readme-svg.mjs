@@ -4,7 +4,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createBlackHole } from '../js/blackhole-core.js';
-import { renderFrame3d } from '../js/blackhole-3d.js';
+import { renderFrame3d } from '../js/blackhole.js';
 
 export const README_GRID = Object.freeze({ cols: 340, rows: 84, charAspect: 0.6, R: 11.5 });
 export const FRAMES = 90;

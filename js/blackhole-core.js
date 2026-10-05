@@ -1,6 +1,7 @@
-// Pure ASCII black hole renderer: no DOM. Shared by the site (js/blackhole.js) and the
-// README generator (tools/render-readme-svg.mjs). Screen units: shadow radius = 1,
-// x to the right, y downward.
+// Pure ASCII black hole pieces, no DOM: the disk texture and hot spots, star field, grid
+// layout and character ramp that the 3D renderer (js/blackhole.js) lays onto the real disk,
+// plus the original flat, fixed-angle renderer (shade / renderFrame).
+// Screen units: shadow radius = 1, x to the right, y downward.
 
 export const RAMP = ' .·:-=+*#%@';
 

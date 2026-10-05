@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { renderFrame3d, escAt, BC, STARLESS, DEFAULT_VIEW } from '../js/blackhole-3d.js';
+import { renderFrame3d, escAt, BC, STARLESS, DEFAULT_VIEW } from '../js/blackhole.js';
 import { createBlackHole, layout } from '../js/blackhole-core.js';
 
 const grid = layout({ width: 1440, height: 900, charAspect: 0.6 });
