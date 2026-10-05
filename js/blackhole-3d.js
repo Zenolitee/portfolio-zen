@@ -12,7 +12,7 @@ const SCALE = RIN / PARAMS.RIN;               // M units -> the 2D texture's uni
 const ROUT = (PARAMS.ROUT + 0.6) * SCALE;     // the texture has faded out past here
 const GAIN = 1.9, OPACITY = 0.8, DCAM = 60;   // DCAM: camera distance (only bends the sky)
 export const STARLESS = 1.5 * BC;             // keep the hole clean: no lensed stars this close in
-export const DEFAULT_VIEW = Object.freeze({ incl: 80 * PI / 180, az: 0, doppler: 2.5 });
+export const DEFAULT_VIEW = Object.freeze({ incl: 80 * PI / 180, az: 0, doppler: 4 });   // doppler 4: the real g^4 beaming
 const K = 2;                                  // disk images animated per ray: the direct one and the first lensed one
 const RING_K = 5, RING_S = 8;                 // further images (the photon ring) up to RING_K, averaged over RING_S samples
 
@@ -262,7 +262,7 @@ export function mount(pre, surface) {
   new ResizeObserver(resize).observe(pre);
   resize();
   requestAnimationFrame(tick);
-  return { view, redraw: () => { dirty = true; } };
+  return { view };
 }
 
 if (typeof document !== 'undefined') {
