@@ -32,8 +32,9 @@ Notes work the same way with `_templates/note.html` and `notes.html`.
 
 ## Black hole
 
-- `js/blackhole-core.js` — pure renderer (no DOM), shared by the site and the README generator.
-- `js/blackhole.js` — mounts it into the home page: sizing, 30 fps loop, pausing.
+- `js/blackhole.js` — the home page's 3D black hole: light traced through Schwarzschild geometry,
+  drag (or arrow keys) to orbit, Home or double-click to reset. Also renders the README SVG.
+- `js/blackhole-core.js` — the pieces it builds on (disk texture, stars, layout), no DOM.
 - `npm run readme-svg` — regenerates `assets/readme/blackhole.svg` for the GitHub profile.
 
 Design notes: `docs/superpowers/specs/2026-09-30-portfolio-design.md`.
