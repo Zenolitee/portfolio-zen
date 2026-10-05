@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zenolite (3D mock)</title>
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* mock only: drag surface, hint and the Doppler switch */
+    .landing { cursor: grab; touch-action: none; }
+    .landing.is-dragging { cursor: grabbing; }
+    .mock-panel { position: absolute; z-index: 2; left: 50%; bottom: 13vh; transform: translateX(-50%); display: flex; gap: 14px; align-items: center; font: 11px/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
+    .mock-panel button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); background: none; border: 1px solid var(--line); padding: 6px 9px; cursor: pointer; }
+    .mock-panel button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+  </style>
+  <script type="module" src="../js/blackhole-3d.js"></script>
+  <script type="module" src="../js/trail.js"></script>
+</head>
+<body>
+  <main class="landing" data-trail>
+    <h1 class="visually-hidden">Zenolite — portfolio (3D black hole mock)</h1>
+    <pre id="blackhole" class="blackhole" aria-hidden="true"></pre>
+    <p class="identity" data-trail-ignore>Zenolite</p>
+    <nav aria-label="Site">
+      <a class="corner corner--tl" href="../about.html">About<span aria-hidden="true">↗</span></a>
+      <a class="corner corner--tr" href="../projects/index.html">Projects<span aria-hidden="true">↗</span></a>
+      <a class="corner corner--bl" href="../notes.html">Notes<span aria-hidden="true">↗</span></a>
+      <a class="corner corner--br" href="../contact.html">Contact<span aria-hidden="true">↗</span></a>
+    </nav>
+    <div class="mock-panel" data-trail-ignore>
+      <span>drag to look around · double-click to reset</span>
+      <span>doppler</span>
+      <button type="button" data-doppler="0">off</button>
+      <button type="button" data-doppler="2.5" aria-pressed="true">soft</button>
+      <button type="button" data-doppler="4">real</button>
+    </div>
+    <p class="copyright" data-trail-ignore>© 2026 Zenolite</p>
+  </main>
+  <script type="module">
+    const buttons = document.querySelectorAll('[data-doppler]');
+    for (const b of buttons) b.addEventListener('click', () => {
+      window.blackhole.view.doppler = Number(b.dataset.doppler);
+      window.blackhole.redraw();
+      for (const o of buttons) o.setAttribute('aria-pressed', String(o === b));
+    });
+  </script>
+</body>
+</html>
