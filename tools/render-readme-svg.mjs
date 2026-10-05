@@ -3,9 +3,10 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { createBlackHole, renderFrame } from '../js/blackhole-core.js';
+import { createBlackHole } from '../js/blackhole-core.js';
+import { renderFrame3d } from '../js/blackhole-3d.js';
 
-export const README_GRID = Object.freeze({ cols: 340, rows: 84, charAspect: 0.6, R: 12 });
+export const README_GRID = Object.freeze({ cols: 340, rows: 84, charAspect: 0.6, R: 11.5 });
 export const FRAMES = 90;
 const FONT = 12;                                    // px; one cell is 0.6 x 1 font size
 const CELL_W = FONT * README_GRID.charAspect;
@@ -15,9 +16,9 @@ export function renderFrames(n = FRAMES, grid = README_GRID) {
   const bh = createBlackHole({ loop: true });
   const dt = bh.loopSeconds / n;
   const hole = { ...bh, twinkle: () => 0 };
-  const frames = Array.from({ length: n }, (_, k) => renderFrame(hole, grid, k * dt));
+  const frames = Array.from({ length: n }, (_, k) => renderFrame3d(hole, grid, k * dt));
   // no star where the black hole ever draws, or the two layers would overlap
-  const stars = [...renderFrame({ shade: () => 0, twinkle: () => 0.14 }, grid, 0)]
+  const stars = [...renderFrame3d({ disk: () => 0, twinkle: () => 0.14 }, grid, 0)]
     .map((c, k) => (c !== '\n' && frames.some(f => f[k] !== ' ') ? ' ' : c)).join('');
   return { frames, stars, loopSeconds: bh.loopSeconds };
 }

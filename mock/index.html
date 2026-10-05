@@ -11,7 +11,7 @@
     /* mock only: drag surface, hint and the Doppler switch */
     .landing { cursor: grab; touch-action: none; }
     .landing.is-dragging { cursor: grabbing; }
-    .mock-panel { position: absolute; z-index: 2; left: 50%; bottom: 13vh; transform: translateX(-50%); display: flex; gap: 14px; align-items: center; font: 11px/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
+    .mock-panel { position: absolute; z-index: 2; left: 50%; bottom: 13vh; transform: translateX(-50%); display: flex; gap: 14px; align-items: center; font: 11px/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; flex-wrap: wrap; justify-content: center; width: min(92vw, 1000px); line-height: 1.6; text-align: center; }
     .mock-panel button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); background: none; border: 1px solid var(--line); padding: 6px 9px; cursor: pointer; }
     .mock-panel button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
   </style>
@@ -30,7 +30,7 @@
       <a class="corner corner--br" href="../contact.html">Contact<span aria-hidden="true">↗</span></a>
     </nav>
     <div class="mock-panel" data-trail-ignore>
-      <span>drag to look around · double-click to reset</span>
+      <span>drag or arrow keys to look around · double-click or home to reset</span>
       <span>doppler</span>
       <button type="button" data-doppler="0">off</button>
       <button type="button" data-doppler="2.5" aria-pressed="true">soft</button>
