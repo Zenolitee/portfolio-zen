@@ -53,3 +53,17 @@ test('data-preview clips are checked too', () => {
 test('the site has no broken internal links', () => {
   assert.deepEqual(checkLinks(repoRoot), []);
 });
+
+test('percent-encoded paths are decoded; malformed encoding is broken', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'links-'));
+  writeFileSync(join(dir, 'my file.html'), '');
+  writeFileSync(join(dir, 'a.html'), '<a href="my%20file.html">ok</a> <a href="bad%E0%A4%A.html">bad</a>');
+  assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'bad%E0%A4%A.html' }]);
+});
+
+test('path case must match exactly (GitHub Pages is case-sensitive)', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'links-'));
+  writeFileSync(join(dir, 'b.html'), '');
+  writeFileSync(join(dir, 'a.html'), '<a href="b.html">ok</a> <a href="B.html">wrong case</a>');
+  assert.deepEqual(checkLinks(dir), [{ file: 'a.html', ref: 'B.html' }]);
+});

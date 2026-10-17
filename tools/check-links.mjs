@@ -15,8 +15,15 @@ function htmlFiles(dir) {
   });
 }
 
-function exists(target) {
-  if (!existsSync(target)) return false;
+// GitHub Pages is case-sensitive, Windows/macOS existsSync is not: check each segment's exact case.
+function exactCase(target, root) {
+  const parts = relative(root, target).split(/[\\/]/);
+  let dir = root;
+  return parts.every(name => name === '' || (readdirSync(dir).includes(name) && (dir = join(dir, name))));
+}
+
+function exists(target, root) {
+  if (!existsSync(target) || !exactCase(target, root)) return false;
   return statSync(target).isDirectory() ? existsSync(join(target, 'index.html')) : true;
 }
 
@@ -27,11 +34,12 @@ export function checkLinks(root, base = SITE_BASE) {
     const html = readFileSync(file, 'utf8').replace(/<!--[\s\S]*?-->/g, '');
     for (const [, ref] of html.matchAll(/\b(?:href|src|poster|data-preview)="([^"]*)"/g)) {
       if (ref === '' || /^(#|[a-z][a-z0-9+.-]*:|\/\/)/i.test(ref)) continue;
-      const path = ref.split(/[?#]/)[0];
+      let path;
+      try { path = decodeURIComponent(ref.split(/[?#]/)[0]); } catch { broken.push({ file: relative(root, file).replaceAll('\\', '/'), ref }); continue; }
       let target = null;
       if (path.startsWith(base)) target = join(root, path.slice(base.length));
       else if (!path.startsWith('/')) target = resolve(dirname(file), path);
-      if (!target || !exists(target)) broken.push({ file: relative(root, file).replaceAll('\\', '/'), ref });
+      if (!target || !exists(target, root)) broken.push({ file: relative(root, file).replaceAll('\\', '/'), ref });
     }
   }
   return broken;
