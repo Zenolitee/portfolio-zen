@@ -178,9 +178,8 @@ const FRAME_MS = 1000 / 30, IDLE_MS = 4000, STEP = 0.08;
 
 export function mount(pre, surface) {
   const bh = createBlackHole();
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const view = { ...DEFAULT_VIEW };
-  let grid = null, last = -Infinity, dirty = true;
+  let grid = null, last = -Infinity;
   let drag = null, vel = { az: 0, incl: 0 }, lastInput = -Infinity;
 
   const probe = document.createElement('span');
@@ -190,24 +189,19 @@ export function mount(pre, surface) {
   const charAspect = probe.getBoundingClientRect().width / 100 / 100;
   probe.remove();
 
-  const still = () => reduceMotion.matches;
   const clampIncl = x => Math.min(PI - 0.03, Math.max(0.03, x));
-  const turn = (daz, dincl) => { view.az += daz; view.incl = clampIncl(view.incl + dincl); dirty = true; };
-  const reset = () => {
-    lastInput = -Infinity; vel = { az: 0, incl: 0 };
-    if (still()) { view.az = DEFAULT_VIEW.az; view.incl = DEFAULT_VIEW.incl; dirty = true; }  // no glide
-  };
-  const draw = now => { pre.textContent = renderFrame3d(bh, grid, still() ? 0 : now / 1000, view); dirty = false; };
+  const turn = (daz, dincl) => { view.az += daz; view.incl = clampIncl(view.incl + dincl); };
+  const reset = () => { lastInput = -Infinity; vel = { az: 0, incl: 0 }; };
+  const draw = now => { pre.textContent = renderFrame3d(bh, grid, now / 1000, view); };
 
   function resize() {
     grid = layout({ width: pre.clientWidth, height: pre.clientHeight, charAspect });
     pre.style.fontSize = `${grid.fontSize}px`;
-    dirty = true;
   }
 
   function tick(now) {
     requestAnimationFrame(tick);
-    if (!drag && !still()) {
+    if (!drag) {
       // coast after a flick, then glide home once left alone
       if (Math.abs(vel.az) + Math.abs(vel.incl) > 1e-4) {
         turn(vel.az, vel.incl);
@@ -218,7 +212,7 @@ export function mount(pre, surface) {
         if (Math.abs(da) + Math.abs(di) > 1e-3) turn(da * 0.04, di * 0.04);
       }
     }
-    if ((dirty || !still()) && !document.hidden && now - last >= FRAME_MS) { last = now; draw(now); }
+    if (!document.hidden && now - last >= FRAME_MS) { last = now; draw(now); }
   }
 
   surface.addEventListener('pointerdown', e => {
@@ -240,7 +234,6 @@ export function mount(pre, surface) {
   const end = e => {
     if (!drag || e.pointerId !== drag.id) return;
     drag = null; lastInput = performance.now();
-    if (still()) vel = { az: 0, incl: 0 };                    // no coasting
     surface.classList.remove('is-dragging');
     surface.removeAttribute('data-trail-ignore');
   };
@@ -257,7 +250,6 @@ export function mount(pre, surface) {
     else return;
     e.preventDefault();
   });
-  reduceMotion.addEventListener('change', () => { dirty = true; });
 
   new ResizeObserver(resize).observe(pre);
   resize();
