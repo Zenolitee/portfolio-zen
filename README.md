@@ -17,7 +17,7 @@ python -m http.server 8765
 ## Checks
 
 ```sh
-npm test              # renderer, link checker and README-SVG tests (Node 22+, no dependencies)
+npm test              # all tests/*.test.mjs: black hole renderer, trail, showcase, content, link checker, README SVG (Node 22+, no dependencies)
 npm run check-links   # every internal link resolves
 ```
 
@@ -28,7 +28,7 @@ npm run check-links   # every internal link resolves
    Encode clips small and web-safe: `ffmpeg -i in.mp4 -vf scale=960:540,fps=25,format=yuv420p -c:v libx264 -crf 28 -an -movflags +faststart preview.mp4`
 3. Copy a `<li class="show-row">` block in `projects/index.html` (the clip plays on hover), then run `npm test`.
 
-Notes work the same way with `_templates/note.html` and `notes.html`.
+Notes work the same way with `_templates/note.html` and `notes.html`; create the `notes/` folder for the first note.
 
 ## Black hole
 

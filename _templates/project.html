@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
 <!-- New project: copy to projects/<slug>.html, replace every UPPERCASE placeholder,
-     put images in assets/projects/<slug>/, and add a card to projects/index.html. -->
+     put poster.jpg (and preview.mp4) in assets/projects/<slug>/, and add a card to projects/index.html.
+     With a video hero (see project-athena.html), swap the <img> for its <video> and add
+     <script type="module" src="../js/showcase.js"></script> to <head>. detail-*.png images are optional. -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,9 +29,9 @@
         <dt>Year</dt><dd>YEAR</dd>
         <dt>Role</dt><dd>ROLE</dd>
         <dt>Stack</dt><dd>STACK</dd>
-        <dt>Source</dt><dd><a href="https://github.com/Zenolitee/REPO">GitHub ↗</a></dd>
+        <dt>Source</dt><dd><a href="https://github.com/Zenolitee/REPO">GitHub <span aria-hidden="true">↗</span></a></dd>
       </dl>
-      <div class="frame detail-hero"><img src="../assets/projects/SLUG/cover.png" alt="PROJECT NAME screenshot" width="1600" height="900"></div>
+      <div class="frame detail-hero"><img src="../assets/projects/SLUG/poster.jpg" alt="PROJECT NAME screenshot" width="1280" height="720"></div>
       <div class="prose">
         <p>WHAT IT IS AND WHY YOU BUILT IT.</p>
         <h2>How it works</h2>
