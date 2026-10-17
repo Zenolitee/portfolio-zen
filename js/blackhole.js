@@ -180,7 +180,7 @@ export function mount(pre, surface) {
   const bh = createBlackHole();
   const view = { ...DEFAULT_VIEW };
   let grid = null, last = -Infinity;
-  let drag = null, vel = { az: 0, incl: 0 }, lastInput = -Infinity;
+  let drag = null, vel = { az: 0, incl: 0 }, lastInput = -Infinity, prev = performance.now();
 
   const probe = document.createElement('span');
   probe.textContent = 'M'.repeat(100);
@@ -201,23 +201,24 @@ export function mount(pre, surface) {
 
   function tick(now) {
     requestAnimationFrame(tick);
+    const dt = Math.min(64, now - prev) / (1000 / 60); prev = now;  // 60 Hz frames elapsed
     if (!drag) {
       // coast after a flick, then glide home once left alone
       if (Math.abs(vel.az) + Math.abs(vel.incl) > 1e-4) {
-        turn(vel.az, vel.incl);
-        vel.az *= 0.92; vel.incl *= 0.92;
+        turn(vel.az * dt, vel.incl * dt);
+        vel.az *= 0.92 ** dt; vel.incl *= 0.92 ** dt;
       } else if (now - lastInput > IDLE_MS) {
         const da = Math.atan2(Math.sin(DEFAULT_VIEW.az - view.az), Math.cos(DEFAULT_VIEW.az - view.az));
         const di = DEFAULT_VIEW.incl - view.incl;
-        if (Math.abs(da) + Math.abs(di) > 1e-3) turn(da * 0.04, di * 0.04);
+        if (Math.abs(da) + Math.abs(di) > 1e-3) turn(da * (1 - 0.96 ** dt), di * (1 - 0.96 ** dt));
       }
     }
     if (!document.hidden && now - last >= FRAME_MS) { last = now; draw(now); }
   }
 
   surface.addEventListener('pointerdown', e => {
-    if (e.button !== 0 || e.target.closest('a, button')) return;
-    drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    if (drag || e.button !== 0 || e.target.closest('a, button')) return;
+    drag = { x: e.clientX, y: e.clientY, id: e.pointerId, t: e.timeStamp };
     vel = { az: 0, incl: 0 };
     try { surface.setPointerCapture(e.pointerId); } catch {}  // keep the drag even if capture isn't possible
     surface.classList.add('is-dragging');
@@ -226,13 +227,16 @@ export function mount(pre, surface) {
   surface.addEventListener('pointermove', e => {
     if (!drag || e.pointerId !== drag.id) return;
     const k = 4 / Math.max(400, surface.clientHeight);         // ~ one drag across the screen = a full turn
-    vel = { az: -(e.clientX - drag.x) * k, incl: -(e.clientY - drag.y) * k };
-    turn(vel.az, vel.incl);
-    drag.x = e.clientX; drag.y = e.clientY;
+    const az = -(e.clientX - drag.x) * k, incl = -(e.clientY - drag.y) * k;
+    const f = Math.min(4, Math.max(0.25, (e.timeStamp - drag.t) / (1000 / 60)));  // event gap in 60 Hz frames
+    vel = { az: az / f, incl: incl / f };                      // per-frame rate, independent of polling rate
+    turn(az, incl);
+    drag.x = e.clientX; drag.y = e.clientY; drag.t = e.timeStamp;
     lastInput = performance.now();
   });
   const end = e => {
     if (!drag || e.pointerId !== drag.id) return;
+    if (e.timeStamp - drag.t > 80) vel = { az: 0, incl: 0 };   // held still: no flick
     drag = null; lastInput = performance.now();
     surface.classList.remove('is-dragging');
     surface.removeAttribute('data-trail-ignore');
@@ -243,7 +247,7 @@ export function mount(pre, surface) {
 
   // arrow keys orbit, Home resets (ignored while typing or with modifier keys)
   document.addEventListener('keydown', e => {
-    if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
+    if (e.altKey || e.ctrlKey || e.shiftKey || e.defaultPrevented || e.metaKey || e.target.closest('input, textarea, select, [contenteditable]')) return;
     const moves = { ArrowLeft: [STEP, 0], ArrowRight: [-STEP, 0], ArrowUp: [0, STEP], ArrowDown: [0, -STEP] };
     if (e.key === 'Home') reset();
     else if (moves[e.key]) { turn(...moves[e.key]); vel = { az: 0, incl: 0 }; lastInput = performance.now(); }
