@@ -1,20 +1,14 @@
 // Pure ASCII black hole pieces, no DOM: the disk texture and hot spots, star field, grid
-// layout and character ramp that the 3D renderer (js/blackhole.js) lays onto the real disk,
-// plus the original flat, fixed-angle renderer (shade / renderFrame).
+// layout and character ramp that the 3D renderer (js/blackhole.js) lays onto the real disk.
 // Screen units: shadow radius = 1, x to the right, y downward.
 
 export const RAMP = ' .·:-=+*#%@';
 
 export const PARAMS = Object.freeze({
-  RS: 1.0,             // shadow radius
   RIN: 1.4,            // accretion disk inner edge
   ROUT: 4.3,           // outer edge (fades out over a further 0.6)
-  TILT: 0.12,          // disk seen nearly edge-on
-  GAIN: 1.9,
   SPIN: 2.0,           // Keplerian scale: omega(rho) = SPIN * rho^-1.5
   RREF: 2.0,           // the disk texture turns rigidly at omega(RREF)
-  BOX_X: 5.0,          // everything drawn lies inside |x| < BOX_X, |y| < BOX_Y
-  BOX_Y: 2.0,
   STAR_DENSITY: 0.012,
 });
 
@@ -42,7 +36,7 @@ function pnoise(x, y, P) {
 }
 
 export function createBlackHole({ loop = false, hotspots = true } = {}) {
-  const { RS, RIN, ROUT, TILT, SPIN, RREF, BOX_X, BOX_Y } = PARAMS;
+  const { RIN, ROUT, SPIN, RREF } = PARAMS;
   const textureOmega = SPIN * Math.pow(RREF, -1.5);
   const loopSeconds = TAU / textureOmega;
   // In loop mode every periodic motion completes a whole number of turns per loop,
@@ -73,43 +67,11 @@ export function createBlackHole({ loop = false, hotspots = true } = {}) {
     return e;
   }
 
-  // brightness at screen point (x, y), before GAIN and stars
-  function shade(x, y, time) {
-    if (Math.abs(x) >= BOX_X || Math.abs(y) >= BOX_Y) return 0;
-    const t = wrap(time), r = Math.hypot(x, y);
-    let v = 0;
-
-    // lensed image of the far disk: arc over the top (strong) and under the bottom (thin)
-    if (r > RS) {
-      const top = y < 0;
-      const rh = RIN + (r - RS * 1.04) * (top ? 4.2 : 6.0);
-      const w = top ? 0.45 + 0.55 * smooth(0.1, -0.9, y / r) : 0.45 * smooth(0.2, 0.95, y / r);
-      const dop = 1 + 0.45 * (-x / r);
-      v += disk(rh, Math.atan2(y, x), t) * w * dop * 1.15;
-    }
-
-    // photon ring
-    v += 1.1 * Math.exp(-Math.pow((r - RS * 1.035) / 0.03, 2));
-
-    // flat disk seen nearly edge-on; its far half is hidden inside the shadow
-    const dy = y / TILT, rho = Math.hypot(x, dy);
-    if (!(y < 0 && r < RS)) {
-      const dop = 1 + 0.6 * (-x / rho);                        // approaching (left) side brighter
-      const wisp = 1 - 0.55 * smooth(2.0, ROUT, rho);          // outer disk thins into streaks
-      v += disk(rho, Math.atan2(dy, x), t) * dop * wisp * (y > 0 ? 1.5 : 1.1);
-    }
-
-    // the shadow swallows everything behind it
-    if (r < RS * 0.985 && !(y > 0 && rho < ROUT + 0.6 && rho > RIN - 0.25)) v = 0;
-    return v;
-  }
-
   function twinkle(s, time) {
     return 0.08 + 0.12 * (0.5 + 0.5 * Math.sin(wrap(time) * quantize(1 + s * 3) + s * 40));
   }
 
   return {
-    shade,
     disk: (rho, phi, t) => disk(rho, phi, wrap(t)),
     twinkle,
     textureOmega,
@@ -138,34 +100,4 @@ export function layout({ width, height, charAspect, maxCols = 380, minFont = 5 }
   const narrow = width < 620;                                   // phones: bigger, runs off the sides
   const R = Math.min(cols * charAspect * (narrow ? 0.17 : 0.095), rows * 0.15);
   return { fontSize, cols, rows, R, charAspect };
-}
-
-// the star field only depends on the grid size, so it's computed once per size
-let starCache = { cols: -1, rows: -1, stars: null };
-function starsFor(cols, rows) {
-  if (starCache.cols !== cols || starCache.rows !== rows) {
-    const stars = new Float64Array(cols * rows);
-    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) stars[j * cols + i] = starAt(i, j);
-    starCache = { cols, rows, stars };
-  }
-  return starCache.stars;
-}
-
-export function renderFrame(bh, { cols, rows, charAspect, R }, t) {
-  const cx = cols / 2, cy = rows / 2, lines = new Array(rows), stars = starsFor(cols, rows);
-  for (let j = 0; j < rows; j++) {
-    const y = (j - cy + 0.5) / R;
-    let line = '';
-    for (let i = 0; i < cols; i++) {
-      const x = ((i - cx + 0.5) * charAspect) / R;
-      let v = bh.shade(x, y, t) * PARAMS.GAIN;
-      if (v < 0.05 && Math.hypot(x, y) >= PARAMS.RS) {        // no stars behind the shadow
-        const s = stars[j * cols + i];
-        if (s) v = bh.twinkle(s, t);                           // after GAIN so stars stay faint
-      }
-      line += v <= 0 ? ' ' : charFor(v);                       // most cells are empty space
-    }
-    lines[j] = line;
-  }
-  return lines.join('\n');
 }
