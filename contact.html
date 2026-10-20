@@ -23,7 +23,7 @@
       <div class="lead"><p>The best way to reach me is on GitHub.</p></div>
       <dl class="meta-list">
         <dt>GitHub</dt><dd><a href="https://github.com/Zenolitee">github.com/Zenolitee <span aria-hidden="true">↗</span></a></dd>
-        <dt>Email me</dt><dd><a href="panganiban.ericmyles@gmail.com">Email <span aria-hidden="true">↗</span></a></dd>
+        <dt>Email me</dt><dd><a href="mailto:panganiban.ericmyles@gmail.com" id="copy-email">Email</a> <span id="copy-email-status" role="status"></span></dd>
         <!-- Add more rows, e.g.:
         <dt>Email</dt><dd><a href="mailto:you@example.com">you@example.com</a></dd>
         <dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/you/">linkedin.com/in/you <span aria-hidden="true">↗</span></a></dd> -->
@@ -31,5 +31,22 @@
     </main>
     <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
   </div>
+  <script>
+    // Click copies the address; if the clipboard is unavailable the mailto: link opens as normal.
+    const link = document.getElementById('copy-email');
+    const status = document.getElementById('copy-email-status');
+    link.addEventListener('click', async (e) => {
+      if (!navigator.clipboard) return;
+      e.preventDefault();
+      try {
+        await navigator.clipboard.writeText(link.href.replace('mailto:', ''));
+        status.textContent = 'Email copied';
+        clearTimeout(link.timer);
+        link.timer = setTimeout(() => { status.textContent = ''; }, 2000);
+      } catch {
+        location.href = link.href;
+      }
+    });
+  </script>
 </body>
 </html>
