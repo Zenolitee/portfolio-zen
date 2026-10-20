@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>asciify-ps — Zenolite</title>
-  <meta name="description" content="asciify-ps: Windows desktop GUI that turns images into coloured ASCII art.">
+  <meta name="description" content="asciify-ps: a Windows 2000-style desktop app that turns images into coloured ASCII art.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/style.css">
@@ -20,16 +20,31 @@
     </nav>
     <main>
       <h1 class="detail-title">asciify-ps</h1>
-      <p class="detail-summary">A Windows desktop GUI that turns images into coloured ASCII art with a live preview.</p>
+      <p class="detail-summary">A Windows 2000-style desktop app that turns images into coloured ASCII art with a live preview.</p>
       <dl class="meta-list">
         <dt>Year</dt><dd>2026</dd>
         <dt>Role</dt><dd>Design &amp; build</dd>
-        <dt>Stack</dt><dd>Python · asciify-them</dd>
+        <dt>Stack</dt><dd>Python · Tkinter · Pillow · asciify-them</dd>
         <dt>Source</dt><dd><a href="https://github.com/Zenolitee/asciify-ps">GitHub <span aria-hidden="true">↗</span></a></dd>
       </dl>
-      <div class="frame detail-hero"><img src="../assets/projects/asciify-ps/poster.jpg" alt="asciify-ps screenshots" width="1280" height="720"></div>
+      <div class="frame detail-hero"><img src="../assets/projects/asciify-ps/poster.jpg" alt="asciify-ps window: image adjustment sliders on the left, a coloured ASCII sunset in the preview" width="1600" height="1000"></div>
       <div class="prose">
-        <p>asciify-ps is a desktop front end for the asciify-them rendering library: load an image, adjust the output and watch the coloured ASCII version update live.</p>
+        <p>asciify-ps is a desktop front end for the asciify-them rendering library. Open or drag in an image, adjust it, and watch the coloured ASCII version redraw as you go.</p>
+        <h2>What's new in 1.1</h2>
+        <ul>
+          <li>A Windows 2000-inspired classic interface: beveled buttons, framed settings, tabs and a dark ASCII canvas.</li>
+          <li>Brightness, contrast, gamma and saturation sliders that update the preview live.</li>
+          <li>Adjustable edge sensitivity for stronger or subtler outlines.</li>
+          <li>Your own character ramp, from sparse to dense.</li>
+          <li>Presets: save the current settings to a JSON file and load them for the next image.</li>
+        </ul>
+        <h2>Everything else</h2>
+        <ul>
+          <li>Five built-in character sets, including braille for the smoothest gradients.</li>
+          <li>Colour or black and white, 20 to 300 columns wide.</li>
+          <li>Copy to the clipboard, or save as <code>.txt</code>, <code>.ps1</code> (PowerShell) or <code>.cmd</code>.</li>
+          <li>Ships as a single <code>.exe</code>: no install, no console window.</li>
+        </ul>
       </div>
       <a class="back-link" href="index.html">← All projects</a>
     </main>

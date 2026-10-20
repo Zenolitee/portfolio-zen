@@ -26,19 +26,16 @@ test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps
   assert.deepEqual(titles, ['Project Athena', 'Relicore', 'AgentPresence', 'asciify-ps']);
 });
 
-test('each card has a poster and a data-url; only cards with footage name a preview; one shared pop-out window', () => {
+test('each card has a poster; only cards with footage name a preview clip; Athena leads the page', () => {
   const page = read('projects/index.html');
-  const rows = page.split('<li class="show-row">').slice(1);
-  assert.equal(rows.length, 4);
-  for (const row of rows) {
-    assert.match(row, /<img class="show-poster" src="[^"]+poster\.jpg"/);
-    assert.match(row, /data-url="[^"]+"/);
-  }
-  // only projects with real footage get a clip; the rest pop out as a still image
-  const withClip = rows.filter(r => /data-preview="[^"]+preview\.mp4"/.test(r)).map(r => r.match(/href="([^"]+)\.html"/)[1]);
+  const cards = page.split(/<li class="show[ "]/).slice(1);
+  assert.equal(cards.length, 4);
+  for (const card of cards) assert.match(card, /<img class="show-poster" src="[^"]+poster\.jpg"/);
+  // only projects with real footage get a clip; the rest stay a still image
+  const withClip = cards.filter(c => /data-preview="[^"]+preview\.mp4"/.test(c)).map(c => c.match(/href="([^"]+)\.html"/)[1]);
   assert.deepEqual(withClip, ['project-athena', 'relicore']);
-  assert.equal(page.match(/class="peek"/g).length, 1);
-  assert.match(page, /<video class="peek-video" muted loop playsinline preload="none"><\/video>/);
+  for (const card of cards) assert.equal(/class="show-video"/.test(card), /data-preview=/.test(card));
+  assert.match(page, /<li class="show show--featured">\s*<a class="show-link" href="project-athena\.html"/);
 });
 
 test('projects without footage show a still image on their detail page, not a video', () => {
