@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Project Athena — Zenolite</title>
-  <meta name="description" content="Project Athena: Discord bot and web dashboard for Black Desert Online Node War rosters.">
+  <meta name="description" content="Project Athena: Discord bot and web dashboard for Black Desert Online guilds: Node War rosters, a live war map, scoreboard OCR stats and an idle fishing game.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/style.css">
@@ -21,28 +21,46 @@
     </nav>
     <main>
       <h1 class="detail-title">Project Athena</h1>
-      <p class="detail-summary">Discord bot and web dashboard for planning Black Desert Online Node War rosters.</p>
+      <p class="detail-summary">Discord bot and web dashboard that runs Black Desert Online guilds, from Node War sign-ups to post-war stats.</p>
       <dl class="meta-list">
         <dt>Year</dt><dd>2026</dd>
         <dt>Role</dt><dd>Design &amp; build</dd>
-        <dt>Stack</dt><dd>TypeScript · Discord · Supabase · Vercel</dd>
+        <dt>Stack</dt><dd>TypeScript · Node.js · Express · discord.js · Supabase · Gemini API · Railway</dd>
         <dt>Source</dt><dd>Private repository</dd>
         <dt>Live</dt><dd><a href="https://project-athene.up.railway.app/">project-athene.up.railway.app <span aria-hidden="true">↗</span></a></dd>
       </dl>
       <div class="frame detail-hero"><video src="../assets/projects/project-athena/preview.mp4" poster="../assets/projects/project-athena/poster.jpg" controls muted loop playsinline data-autoplay aria-label="Project Athena preview"></video></div>
       <div class="prose">
-        <p>Project Athena creates scheduled raid announcements in Discord, lets guild members sign up from buttons on the announcement, tracks specialist slot limits, and gives server administrators a browser dashboard for schedules and rosters.</p>
+        <p>Project Athena started as a roster bot for Node Wars and grew into the guild's command centre. Officers schedule wars in Discord, members sign up from buttons on the announcement, and after the war the scoreboard screenshot turns into stats on the web dashboard.</p>
+
+        <h2>Event manager</h2>
+        <p>Node Wars, Guild Boss Raids and custom events, created from a Discord wizard (buttons, select menus and modals) or the dashboard. Rosters fill groups like Mainball, Defense, Zerker and Shai with capacity presets per war tier, overflow to Bench when a group is full, and repeat weekly. A minute-based scheduler posts them on time, recovers after restarts and never double-posts.</p>
+        <figure class="shot"><img src="../assets/projects/project-athena/events.jpg" alt="Create Event screen with Node War, Guild Boss Raid and Custom Event options" width="1600" height="665" loading="lazy"></figure>
+
+        <h2>Live war map</h2>
+        <p>An interactive map of the whole game world built from in-game combat logs. It plots every kill and death where it happened, with a heatmap, filters by region and node, a timeline you can replay through the war, and a cannon calculator for siege distances. Guilds can share a read-only link.</p>
+        <figure class="shot"><img src="../assets/projects/project-athena/war-map.jpg" alt="War map of the game world with node, city and gateway markers and map controls" width="1180" height="772" loading="lazy"></figure>
+
+        <h2>Node War stats</h2>
+        <p>Win rate, kills, deaths, damage and K/D per war and per player, with trends against the previous wars, category leaders, class tracking, player search and side-by-side comparisons. Everything exports to CSV.</p>
+        <figure class="shot"><img src="../assets/projects/project-athena/stats.jpg" alt="Guild stats overview: 11 wars, 55% win rate, 3,220 kills and per-war averages" width="1288" height="518" loading="lazy"></figure>
+
+        <h2>Scoreboard OCR</h2>
+        <p>Officers upload the end-of-war scoreboard screenshot and the bot reads every player's numbers with Gemini vision, falling back to Tesseract.js. A separate <code>/ocr</code> command reads in-game chat screenshots in several languages. Each upload lands in a score history that can be reviewed and corrected.</p>
+        <figure class="shot"><img src="../assets/projects/project-athena/scoreboard-ocr.jpg" alt="Score history: a grid of uploaded Node War scoreboards with the numbers read from each" width="1600" height="735" loading="lazy"></figure>
+
+        <h2>Attendance and guild performance</h2>
+        <p>Who showed up to which war, and how the guild's kills, deaths and damage move over time.</p>
+        <div class="image-pair">
+          <figure class="shot"><img src="../assets/projects/project-athena/attendance.jpg" alt="Attendance grid of members against war dates" width="1600" height="499" loading="lazy"></figure>
+          <figure class="shot"><img src="../assets/projects/project-athena/guild-performance.jpg" alt="Guild performance chart of kills, deaths and damage per war" width="1422" height="791" loading="lazy"></figure>
+        </div>
+
+        <h2>Fishing game</h2>
+        <p>An idle fishing game inside the same bot, based on Black Desert's own fishing system. <code>/fish</code> catches from 302 fish across zones, <code>/sell</code> turns them into silver for better rods, floats and outfits, <code>/enhance</code> upgrades gear with a chance to fail, and <code>/autofish</code> hires a Fisherman who keeps fishing while you're away. Servers can pick a role the bot pings when a sea boss appears.</p>
+
         <h2>How it's built</h2>
-        <p>Three packages: shared types and storage, the Discord bot (runs locally), and the web dashboard (runs on Vercel). The bot and the dashboard share state through Supabase.</p>
-        <h2>Features</h2>
-        <ul>
-          <li>One-time and weekly recurring Node War rosters, with tier and weekday capacity presets.</li>
-          <li>Discord creation and editing wizards built from buttons, select menus and modals.</li>
-          <li>Roster groups (Mainball/FFA, Defense, Zerker, Shai, Bench, custom) with automatic overflow to Bench.</li>
-          <li>Guild Boss Raid scheduling with a configurable boss order.</li>
-          <li>A minute-based scheduler with restart recovery and duplicate-post prevention.</li>
-          <li>Discord OAuth dashboard login; JSON-file or Supabase storage.</li>
-        </ul>
+        <p>One TypeScript app: the discord.js bot and an Express dashboard with Discord login share state through Supabase, deployed on Railway. Tested with Playwright.</p>
       </div>
       <a class="back-link" href="index.html">← All projects</a>
     </main>
