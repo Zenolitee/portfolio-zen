@@ -194,6 +194,7 @@ img { display: block; max-width: 100%; height: auto; }
 .shot { margin: 20px 0 8px; border: 1px solid var(--line); background: #111113; }
 .shot img { width: 100%; }
 .image-pair .shot { margin: 0; }
+.shot--discord { max-width: 540px; }
 .prose code { padding: 1px 5px; border: 1px solid var(--line); font-family: var(--mono); font-size: 0.88em; }
 .image-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin: 32px 0; }
 .back-link { display: inline-block; margin-top: 56px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
