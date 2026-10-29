@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — Filmstrip (mockup 5)</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* Mockup 5 — Filmstrip: one project fills the view at a time; scroll sideways, swipe, or use the arrows.
+       Pure CSS scroll-snap; the script only drives the arrows and the position counter. */
+    .strip-bar { display: flex; justify-content: space-between; align-items: center; margin: 0 0 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .strip-bar button { padding: 6px 12px; border: 1px solid var(--line); background: none; color: var(--ink); font: inherit; cursor: pointer; }
+    .strip-bar button:hover { border-color: var(--accent); color: var(--accent); }
+    .strip { display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0; padding: 0 0 8px; list-style: none; }
+    .strip::-webkit-scrollbar { display: none; }
+    .reel { scroll-snap-align: start; display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--line); background: #0f0f11; }
+    .reel-media { position: relative; aspect-ratio: 16 / 8; overflow: hidden; background: #111113; }
+    .reel-media img, .reel-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .reel-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; padding: 24px 28px 28px; }
+    .reel h2 { margin: 0; font-size: clamp(26px, 3.4vw, 38px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; }
+    .reel p { grid-column: 1; margin: 0; color: #b9b5ac; font-size: 15px; max-width: 60ch; }
+    .reel-stack { grid-column: 1; font-size: 12px; color: var(--muted); }
+    .reel-links { grid-column: 2; grid-row: 1 / span 3; display: flex; flex-direction: column; gap: 8px; align-self: end; font-size: 14px; text-align: right; }
+    .reel-links a:first-child { color: var(--accent); }
+    @media (max-width: 760px) {
+      .strip { grid-auto-columns: 92%; }
+      .reel-media { aspect-ratio: 16 / 10; }
+      .reel-body { grid-template-columns: 1fr; padding: 20px; }
+      .reel-links { grid-column: 1; grid-row: auto; flex-direction: row; gap: 18px; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page page--wide">
+    <nav class="page-nav" aria-label="Site">
+      <a href="../../index.html">← Home</a><a href="../../about.html">About</a><a href="#" aria-current="page">Projects</a><a href="../../notes.html">Notes</a><a href="../../contact.html">Contact</a>
+    </nav>
+    <main>
+      <h1 class="page-title">Projects</h1>
+      <div class="strip-bar">
+        <span class="count" aria-live="polite">1 / 4</span>
+        <span><button type="button" data-dir="-1" aria-label="Previous project">←</button> <button type="button" data-dir="1" aria-label="Next project">→</button></span>
+      </div>
+      <ol class="strip" tabindex="0" aria-label="Projects, scroll sideways">
+        <li class="reel">
+          <div class="reel-media"><video src="../../assets/projects/project-athena/preview.mp4" poster="../../assets/projects/project-athena/poster.jpg" muted loop autoplay playsinline></video></div>
+          <div class="reel-body">
+            <h2>Project Athena</h2>
+            <p>Discord bot and web dashboard that runs guild events, rosters, a live war map and stats read from scoreboard screenshots.</p>
+            <span class="reel-stack">TypeScript · Node.js · discord.js · Supabase · Gemini API</span>
+            <div class="reel-links"><a href="../../projects/project-athena.html">Case study</a><a href="https://project-athene.up.railway.app/">Live</a></div>
+          </div>
+        </li>
+        <li class="reel">
+          <div class="reel-media"><video src="../../assets/projects/relicore/preview.mp4" poster="../../assets/projects/relicore/poster.jpg" muted loop autoplay playsinline></video></div>
+          <div class="reel-body">
+            <h2>Relicore</h2>
+            <p>Guess where and when real museum artifacts were made, on a world map. Solo, timeline and multiplayer modes.</p>
+            <span class="reel-stack">Next.js · TypeScript · Prisma · PostgreSQL · MapLibre GL</span>
+            <div class="reel-links"><a href="../../projects/relicore.html">Case study</a><a href="https://relicore-atlas.vercel.app/">Play</a></div>
+          </div>
+        </li>
+        <li class="reel">
+          <div class="reel-media"><img src="../../assets/projects/agent-presence/poster.jpg" alt=""></div>
+          <div class="reel-body">
+            <h2>AgentPresence</h2>
+            <p>Shows which AI coding agent you're using as your Discord status.</p>
+            <span class="reel-stack">Rust · Discord Rich Presence</span>
+            <div class="reel-links"><a href="../../projects/agent-presence.html">Details</a></div>
+          </div>
+        </li>
+        <li class="reel">
+          <div class="reel-media"><img src="../../assets/projects/asciify-ps/poster.jpg" alt="" style="object-position:0 0"></div>
+          <div class="reel-body">
+            <h2>asciify-ps</h2>
+            <p>Windows 2000-style desktop app that turns images into coloured ASCII art.</p>
+            <span class="reel-stack">Python · Tkinter</span>
+            <div class="reel-links"><a href="../../projects/asciify-ps.html">Details</a></div>
+          </div>
+        </li>
+      </ol>
+    </main>
+    <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
+  </div>
+  <script>
+    const strip = document.querySelector('.strip'), reels = [...strip.children], count = document.querySelector('.count');
+    const current = () => Math.round(strip.scrollLeft / (reels[0].offsetWidth + 20));
+    document.querySelectorAll('[data-dir]').forEach(b => b.addEventListener('click', () => {
+      const i = Math.min(reels.length - 1, Math.max(0, current() + Number(b.dataset.dir)));
+      strip.scrollTo({ left: reels[i].offsetLeft - strip.offsetLeft, behavior: 'smooth' });
+    }));
+    strip.addEventListener('scroll', () => { count.textContent = `${current() + 1} / ${reels.length}`; }, { passive: true });
+  </script>
+</body>
+</html>

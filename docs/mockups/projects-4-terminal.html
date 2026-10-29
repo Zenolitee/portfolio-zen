@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — Terminal (mockup 4)</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* Mockup 4 — Terminal: carries the home page's ASCII/monospace voice into the projects list.
+       Each project is a native <details> row that expands into a README-style panel. */
+    .term { font-family: var(--mono); font-size: 13px; }
+    .prompt { color: var(--muted); margin: 0 0 18px; }
+    .prompt b { color: var(--accent); font-weight: 400; }
+    .ls-head, .ls summary { display: grid; grid-template-columns: 110px 70px minmax(0, 1fr) minmax(0, 1.4fr); gap: 20px; }
+    .ls-head { padding: 0 0 8px 22px; color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--line); }
+    .ls { margin: 0; padding: 0; list-style: none; }
+    .ls details { border-bottom: 1px solid var(--line); }
+    .ls summary { position: relative; padding: 14px 0 14px 22px; cursor: pointer; list-style: none; }
+    .ls summary::-webkit-details-marker { display: none; }
+    .ls summary::before { content: "▸"; position: absolute; left: 4px; color: var(--muted); transition: transform 0.2s ease; }
+    .ls details[open] summary::before { transform: rotate(90deg); color: var(--accent); }
+    .ls summary:hover .ls-name { color: var(--accent); }
+    .ls-perm, .ls-date { color: var(--muted); }
+    .ls-name { color: var(--ink); }
+    .ls-desc { color: #b9b5ac; font-family: var(--sans); font-size: 14px; }
+    .readme { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; padding: 8px 0 28px 22px; }
+    .readme figure { margin: 0; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); background: #111113; }
+    .readme img, .readme video { width: 100%; height: 100%; object-fit: cover; }
+    .readme h3 { margin: 0 0 8px; font-family: var(--sans); font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
+    .readme p { margin: 0 0 14px; font-family: var(--sans); font-size: 14px; color: #b9b5ac; }
+    .readme ul { margin: 0 0 16px; padding-left: 1.1em; font-family: var(--sans); font-size: 14px; }
+    .readme .cmd a { color: var(--accent); }
+    .cursor { display: inline-block; width: 8px; height: 15px; vertical-align: -2px; background: var(--ink); animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (max-width: 760px) {
+      .ls-head { display: none; }
+      .ls summary { grid-template-columns: 1fr; gap: 2px; }
+      .ls-perm, .ls-date { display: none; }
+      .readme { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="page page--wide">
+    <nav class="page-nav" aria-label="Site">
+      <a href="../../index.html">← Home</a><a href="../../about.html">About</a><a href="#" aria-current="page">Projects</a><a href="../../notes.html">Notes</a><a href="../../contact.html">Contact</a>
+    </nav>
+    <main class="term">
+      <h1 class="page-title">Projects</h1>
+      <p class="prompt"><b>zen@portfolio</b>:~/projects$ ls -l --sort=time</p>
+      <div class="ls-head" aria-hidden="true"><span>permissions</span><span>date</span><span>name</span><span>description</span></div>
+      <ul class="ls">
+        <li><details open>
+          <summary><span class="ls-perm">drwxr-xr-x</span><span class="ls-date">2026</span><span class="ls-name">project-athena/</span><span class="ls-desc">Discord bot + dashboard for guild events and stats</span></summary>
+          <div class="readme">
+            <figure><video src="../../assets/projects/project-athena/preview.mp4" poster="../../assets/projects/project-athena/poster.jpg" muted loop autoplay playsinline></video></figure>
+            <div>
+              <h3>Project Athena</h3>
+              <p>Runs Black Desert Online guilds from Discord: signups, rosters, attendance and stats read from scoreboard screenshots.</p>
+              <ul><li>Event manager with roster caps and bench overflow</li><li>Live war map</li><li>Gemini-vision scoreboard OCR</li><li>Idle fishing game</li></ul>
+              <p class="cmd">$ open <a href="../../projects/project-athena.html">case-study</a> · <a href="https://project-athene.up.railway.app/">live</a></p>
+            </div>
+          </div>
+        </details></li>
+        <li><details>
+          <summary><span class="ls-perm">drwxr-xr-x</span><span class="ls-date">2026</span><span class="ls-name">relicore/</span><span class="ls-desc">Guess where and when museum artifacts were made</span></summary>
+          <div class="readme">
+            <figure><img src="../../assets/projects/relicore/poster.jpg" alt="" style="object-position:14% 50%"></figure>
+            <div>
+              <h3>Relicore</h3>
+              <p>A map-and-era guessing game on open museum collections, with solo, timeline and 2–8 player lobbies.</p>
+              <ul><li>Next.js, TypeScript, Prisma, PostgreSQL</li><li>MapLibre GL world map</li><li>Data from the Met, CMA, V&amp;A, Smithsonian</li></ul>
+              <p class="cmd">$ open <a href="../../projects/relicore.html">case-study</a> · <a href="https://relicore-atlas.vercel.app/">play</a></p>
+            </div>
+          </div>
+        </details></li>
+        <li><details>
+          <summary><span class="ls-perm">-rwxr-xr-x</span><span class="ls-date">2026</span><span class="ls-name">agent-presence</span><span class="ls-desc">Your AI coding agent as your Discord status</span></summary>
+          <div class="readme">
+            <figure><img src="../../assets/projects/agent-presence/poster.jpg" alt=""></figure>
+            <div><h3>AgentPresence</h3><p>A small Rust tray app that sets Discord Rich Presence to the coding agent you're running.</p><p class="cmd">$ open <a href="../../projects/agent-presence.html">details</a></p></div>
+          </div>
+        </details></li>
+        <li><details>
+          <summary><span class="ls-perm">-rwxr-xr-x</span><span class="ls-date">2025</span><span class="ls-name">asciify-ps</span><span class="ls-desc">Images to coloured ASCII art, Windows 2000 style</span></summary>
+          <div class="readme">
+            <figure><img src="../../assets/projects/asciify-ps/poster.jpg" alt="" style="object-position:0 0"></figure>
+            <div><h3>asciify-ps</h3><p>A Python/Tkinter desktop app with a retro Windows 2000 interface.</p><p class="cmd">$ open <a href="../../projects/asciify-ps.html">details</a></p></div>
+          </div>
+        </details></li>
+      </ul>
+      <p class="prompt" style="margin-top:18px"><b>zen@portfolio</b>:~/projects$ <span class="cursor"></span></p>
+    </main>
+    <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
+  </div>
+</body>
+</html>

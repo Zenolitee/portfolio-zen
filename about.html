@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/cursor.js"></script>
 </head>
 <body>
   <div class="page">
@@ -25,6 +26,13 @@
         <p>Mostly are apps that are for personal use.</p>
         <p>I read the code. Sometimes.</p>
       </div>
+      <a class="gh-card" href="https://github.com/Zenolitee">
+        <img src="https://github.com/Zenolitee.png?size=160" alt="" width="64" height="64">
+        <span>
+          <span class="gh-handle">github.com/Zenolitee <span aria-hidden="true">↗</span></span>
+          <span class="gh-stats" id="gh-stats">Code, experiments and the source for this site</span>
+        </span>
+      </a>
       <dl class="meta-list">
         <dt>Based</dt><dd>Philippines</dd>
         <dt>Focus</dt><dd>Software Development / AI / Quality Assurance</dd>
@@ -33,5 +41,15 @@
     </main>
     <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
   </div>
+  <script>
+    // Live numbers from GitHub's public API; if it's unreachable or rate-limited the static line stays.
+    fetch('https://api.github.com/users/Zenolitee')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(u => {
+        document.getElementById('gh-stats').textContent =
+          `${u.public_repos} public repos · ${u.followers} followers · on GitHub since ${new Date(u.created_at).getFullYear()}`;
+      })
+      .catch(() => {});
+  </script>
 </body>
 </html>

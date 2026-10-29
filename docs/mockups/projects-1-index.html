@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — Index (mockup 1)</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* Mockup 1 — Index: a dense, scannable table. Hovering a row floats its screenshot beside the cursor. */
+    .idx { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .idx-head, .idx-row a { display: grid; grid-template-columns: 56px minmax(0, 1.2fr) minmax(0, 2fr) minmax(0, 1.2fr) 72px; gap: 24px; align-items: baseline; }
+    .idx-head { padding: 10px 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .idx-row a { padding: 22px 0; border-bottom: 1px solid var(--line); text-decoration: none; transition: padding 0.25s ease, color 0.25s ease; }
+    .idx-row a:is(:hover, :focus-visible) { padding-left: 12px; color: var(--accent); }
+    .idx-year, .idx-stack, .idx-status { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .idx-name { font-size: clamp(20px, 2.4vw, 28px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; }
+    .idx-what { color: #b9b5ac; font-size: 14px; }
+    .idx-status { text-align: right; }
+    .idx-status.live { color: var(--accent); }
+    .idx-thumb { display: none; }
+    .float-preview { position: fixed; top: 0; left: 0; z-index: 10; width: 320px; aspect-ratio: 16 / 10; border: 1px solid var(--line); background: #111113; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; }
+    .float-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .float-preview.on { opacity: 1; }
+    @media (max-width: 760px) {
+      .idx-head { display: none; }
+      .idx-row a { grid-template-columns: 1fr auto; gap: 6px 16px; }
+      .idx-thumb { display: block; grid-column: 1 / -1; margin-bottom: 10px; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid var(--line); }
+      .idx-name { grid-column: 1; } .idx-status { grid-column: 2; grid-row: 2; }
+      .idx-what, .idx-stack { grid-column: 1 / -1; } .idx-year { display: none; }
+      .float-preview { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page page--wide">
+    <nav class="page-nav" aria-label="Site">
+      <a href="../../index.html">← Home</a><a href="../../about.html">About</a><a href="#" aria-current="page">Projects</a><a href="../../notes.html">Notes</a><a href="../../contact.html">Contact</a>
+    </nav>
+    <main>
+      <h1 class="page-title">Projects</h1>
+      <div class="idx-head" aria-hidden="true"><span>Year</span><span>Project</span><span>What it does</span><span>Built with</span><span style="text-align:right">Status</span></div>
+      <ol class="idx">
+        <li class="idx-row"><a href="../../projects/project-athena.html" data-img="../../assets/projects/project-athena/poster.jpg">
+          <img class="idx-thumb" src="../../assets/projects/project-athena/poster.jpg" alt="">
+          <span class="idx-year">2026</span><span class="idx-name">Project Athena</span>
+          <span class="idx-what">Discord bot and dashboard that runs guild events, rosters, a live war map and screenshot-read stats.</span>
+          <span class="idx-stack">TypeScript · Supabase</span><span class="idx-status live">Live</span></a></li>
+        <li class="idx-row"><a href="../../projects/relicore.html" data-img="../../assets/projects/relicore/poster.jpg">
+          <img class="idx-thumb" src="../../assets/projects/relicore/poster.jpg" alt="">
+          <span class="idx-year">2026</span><span class="idx-name">Relicore</span>
+          <span class="idx-what">Guess where and when real museum artifacts were made, on a world map. Solo and multiplayer.</span>
+          <span class="idx-stack">Next.js · MapLibre</span><span class="idx-status live">Live</span></a></li>
+        <li class="idx-row"><a href="../../projects/agent-presence.html" data-img="../../assets/projects/agent-presence/poster.jpg">
+          <img class="idx-thumb" src="../../assets/projects/agent-presence/poster.jpg" alt="">
+          <span class="idx-year">2026</span><span class="idx-name">AgentPresence</span>
+          <span class="idx-what">Shows which AI coding agent you're using as your Discord status.</span>
+          <span class="idx-stack">Rust</span><span class="idx-status">Source</span></a></li>
+        <li class="idx-row"><a href="../../projects/asciify-ps.html" data-img="../../assets/projects/asciify-ps/poster.jpg">
+          <img class="idx-thumb" src="../../assets/projects/asciify-ps/poster.jpg" alt="">
+          <span class="idx-year">2025</span><span class="idx-name">asciify-ps</span>
+          <span class="idx-what">Windows 2000-style desktop app that turns images into coloured ASCII art.</span>
+          <span class="idx-stack">Python · Tkinter</span><span class="idx-status">Source</span></a></li>
+      </ol>
+    </main>
+    <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
+  </div>
+  <div class="float-preview" aria-hidden="true"><img alt=""></div>
+  <script>
+    const fp = document.querySelector('.float-preview'), img = fp.querySelector('img');
+    document.querySelectorAll('.idx-row a').forEach(a => {
+      a.addEventListener('mouseenter', () => { img.src = a.dataset.img; fp.classList.add('on'); });
+      a.addEventListener('mouseleave', () => fp.classList.remove('on'));
+      a.addEventListener('mousemove', e => { fp.style.transform = `translate(${e.clientX + 24}px, ${e.clientY - 100}px)`; });
+    });
+  </script>
+</body>
+</html>

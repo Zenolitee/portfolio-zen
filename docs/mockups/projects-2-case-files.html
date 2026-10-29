@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects — Case files (mockup 2)</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* Mockup 2 — Case files: each project is a short case study a recruiter can read in 20 seconds.
+       Media and text alternate sides; the facts sit in a label/value list. */
+    .case { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: start; padding: 64px 0; border-top: 1px solid var(--line); }
+    .case:nth-child(even) .case-media { order: 2; }
+    .case-media { margin: 0; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--line); background: #111113; }
+    .case-media img, .case-media video { width: 100%; height: 100%; object-fit: cover; }
+    .case h2 { margin: 0 0 10px; font-size: clamp(28px, 3.6vw, 40px); font-weight: 500; letter-spacing: -0.04em; line-height: 1.1; }
+    .case-pitch { margin: 0 0 28px; color: #b9b5ac; font-size: 17px; line-height: 1.5; }
+    .facts { display: grid; grid-template-columns: 92px 1fr; gap: 10px 20px; margin: 0 0 28px; font-size: 14px; }
+    .facts dt { color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding-top: 2px; }
+    .facts dd { margin: 0; }
+    .case-links { display: flex; gap: 20px; font-size: 14px; }
+    .case-links a { text-decoration: underline; }
+    .case-links .primary { color: var(--accent); }
+    .case--compact { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); padding: 40px 0; }
+    .case--compact h2 { font-size: 24px; }
+    .case--compact .case-pitch { font-size: 15px; margin-bottom: 14px; }
+    .case--compact:nth-child(even) .case-media { order: 0; }
+    @media (max-width: 760px) {
+      .case, .case--compact { grid-template-columns: 1fr; gap: 24px; padding: 44px 0; }
+      .case:nth-child(even) .case-media { order: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page page--wide">
+    <nav class="page-nav" aria-label="Site">
+      <a href="../../index.html">← Home</a><a href="../../about.html">About</a><a href="#" aria-current="page">Projects</a><a href="../../notes.html">Notes</a><a href="../../contact.html">Contact</a>
+    </nav>
+    <main>
+      <h1 class="page-title">Projects</h1>
+      <div class="lead"><p>Things I've built and tested end to end, from Discord tooling to a museum-artifact game.</p></div>
+
+      <article class="case">
+        <figure class="case-media"><video src="../../assets/projects/project-athena/preview.mp4" poster="../../assets/projects/project-athena/poster.jpg" muted loop autoplay playsinline></video></figure>
+        <div>
+          <h2>Project Athena</h2>
+          <p class="case-pitch">A Discord bot and web dashboard that runs Black Desert Online guilds, so officers stop managing rosters in spreadsheets.</p>
+          <dl class="facts">
+            <dt>Problem</dt><dd>Guild events, signups and attendance lived in chat threads and spreadsheets.</dd>
+            <dt>Built</dt><dd>Slash-command signups with roster caps and bench overflow, a live war map, OCR scoreboard uploads, an idle fishing game.</dd>
+            <dt>Stack</dt><dd>TypeScript, Node.js, discord.js, Express, Supabase, Gemini API</dd>
+            <dt>My role</dt><dd>Solo: design, build, testing, deploy</dd>
+          </dl>
+          <div class="case-links"><a class="primary" href="../../projects/project-athena.html">Read the case study</a><a href="https://project-athene.up.railway.app/">Live dashboard</a></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <figure class="case-media"><video src="../../assets/projects/relicore/preview.mp4" poster="../../assets/projects/relicore/poster.jpg" muted loop autoplay playsinline></video></figure>
+        <div>
+          <h2>Relicore</h2>
+          <p class="case-pitch">A geography-and-history guessing game built on real museum collections.</p>
+          <dl class="facts">
+            <dt>Problem</dt><dd>Museum open-access data is huge but hard to explore casually.</dd>
+            <dt>Built</dt><dd>Map + era guessing with distance scoring, solo and timeline modes, real-time lobbies for 2–8 players.</dd>
+            <dt>Stack</dt><dd>Next.js, TypeScript, Prisma, PostgreSQL, MapLibre GL</dd>
+            <dt>Data</dt><dd>The Met, Cleveland Museum of Art, V&amp;A, Smithsonian</dd>
+          </dl>
+          <div class="case-links"><a class="primary" href="../../projects/relicore.html">Read the case study</a><a href="https://relicore-atlas.vercel.app/">Play it</a></div>
+        </div>
+      </article>
+
+      <article class="case case--compact">
+        <figure class="case-media"><img src="../../assets/projects/agent-presence/poster.jpg" alt=""></figure>
+        <div>
+          <h2>AgentPresence</h2>
+          <p class="case-pitch">Shows which AI coding agent you're using as your Discord status.</p>
+          <dl class="facts"><dt>Stack</dt><dd>Rust, Discord Rich Presence</dd></dl>
+          <div class="case-links"><a class="primary" href="../../projects/agent-presence.html">Details</a></div>
+        </div>
+      </article>
+
+      <article class="case case--compact">
+        <figure class="case-media"><img src="../../assets/projects/asciify-ps/poster.jpg" alt="" style="object-position:0 0"></figure>
+        <div>
+          <h2>asciify-ps</h2>
+          <p class="case-pitch">Windows 2000-style desktop app that turns images into coloured ASCII art.</p>
+          <dl class="facts"><dt>Stack</dt><dd>Python, Tkinter</dd></dl>
+          <div class="case-links"><a class="primary" href="../../projects/asciify-ps.html">Details</a></div>
+        </div>
+      </article>
+    </main>
+    <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
+  </div>
+</body>
+</html>
