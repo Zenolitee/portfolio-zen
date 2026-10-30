@@ -41,7 +41,7 @@ if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pref
 
   addEventListener('pointermove', e => {
     ptr.x = e.clientX; ptr.y = e.clientY; inside = true; wake();
-    link = e.target.closest('a, button, summary, [role="button"]');
+    link = e.target.closest?.('a, button, summary, [role="button"]') ?? null;   // target can be window/document
   }, { passive: true });
   addEventListener('pointerdown', wake);
   addEventListener('keydown', wake);
