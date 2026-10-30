@@ -6,6 +6,7 @@
 // (After the one on githubuniverse.com.)
 export const CELL = 8;
 export const snap = v => CELL * Math.floor(v / CELL);
+export const ENABLED = false;   // switched off for now (the custom cursor replaced it); set true to bring it back
 
 const POOL = 28;
 // [block, glyph]: the black hole's light / mid / dark greys (its gradient stops), dark glyphs
@@ -13,7 +14,7 @@ const COLORS = [['#bdb6a8', '#0b0b0c'], ['#8d897f', '#0b0b0c'], ['#6f6b63', '#0b
 const GLYPHS = ['.', ':', '-', '=', '+', '*', '#', '%', '@', '/', '<', '>'];
 const pick = list => list[Math.floor(Math.random() * list.length)];
 
-if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+if (ENABLED && typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
   const blocks = Array.from({ length: POOL }, () => {
     const b = document.createElement('div');
     b.className = 'trail-block';
