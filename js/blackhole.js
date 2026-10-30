@@ -178,6 +178,7 @@ const FRAME_MS = 1000 / 30, IDLE_MS = 4000, STEP = 0.08;
 
 export function mount(pre, surface) {
   const bh = createBlackHole();
+  bh.twinkle = () => 0;   // the page draws its sky on a canvas (js/stars.js); the README SVG keeps the ASCII stars
   const view = { ...DEFAULT_VIEW };
   let grid = null, last = -Infinity;
   let drag = null, vel = { az: 0, incl: 0 }, lastInput = -Infinity, prev = performance.now();
@@ -258,7 +259,7 @@ export function mount(pre, surface) {
   new ResizeObserver(resize).observe(pre);
   resize();
   requestAnimationFrame(tick);
-  return { view };
+  return { view, get grid() { return grid; } };   // js/stars.js reads both to pan and lens its sky
 }
 
 if (typeof document !== 'undefined') {
