@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seer — Zenolite</title>
+  <meta name="description" content="Seer: a Windows companion app for Athena that records every kill and death of a Black Desert node war and uploads it to the map.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/style.css">
+  <script type="module" src="../js/cursor.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="page-nav" aria-label="Site">
+      <a href="../index.html">← Home</a>
+      <a href="../about.html">About</a>
+      <a href="index.html" aria-current="page">Projects</a>
+      <a href="../notes.html">Notes</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+    <main>
+      <h1 class="detail-title">Seer</h1>
+      <p class="detail-summary">Every kill, seen. A Windows app that records a node war as it happens and sends it to Athena.</p>
+      <dl class="meta-list">
+        <dt>Year</dt><dd>2026</dd>
+        <dt>Role</dt><dd>Design, build and test (solo)</dd>
+        <dt>Stack</dt><dd>Neutralinojs · JavaScript · Python · Npcap</dd>
+        <dt>Platform</dt><dd>Windows 10/11, portable EXE or installer</dd>
+        <dt>Live</dt><dd><a href="https://seer.athenabdo.com/">seer.athenabdo.com <span aria-hidden="true">↗</span></a></dd>
+        <dt>Part of</dt><dd><a href="project-athena.html">Athena</a></dd>
+      </dl>
+      <div class="frame detail-hero"><img src="../assets/projects/seer/session.webp" alt="Seer recording a node war: a live list of kills and deaths with running K/D" width="2360" height="1520"></div>
+      <div class="prose">
+        <p>Athena could already turn a scoreboard into stats, but a scoreboard only says how many kills each player had, not who killed whom or where. Seer fills that gap. It runs on the PC of anyone in the war and records each kill and death as it happens, with the guild and the place.</p>
+
+        <h2>A live kill feed</h2>
+        <p>Every kill and death appears as it happens, with the guild and a running alliance and enemy K/D, so officers can see how the war is going while it's still being fought.</p>
+
+        <h2>Fix a whole war in one click</h2>
+        <p>If a name or guild is read wrong, correct it once and every row of the war follows. Quick fixes handle the common cases, like swapping killer and victim or picking which column is the guild.</p>
+        <figure class="shot"><img src="../assets/projects/seer/edit.webp" alt="Seer's war editor with quick fixes and a guild-name mapping list" width="2360" height="1520" loading="lazy"></figure>
+
+        <h2>Every kill on the map</h2>
+        <p>When the war ends the recording uploads to the guild's page on Athena, where each kill sits at the place it happened. The map can be shared with one link, and no account is needed to open it.</p>
+        <figure class="shot"><img src="../assets/projects/athena/map.webp" alt="Kills from a Seer recording plotted on the Athena map beside the combat feed" width="2120" height="1120" loading="lazy"></figure>
+
+        <h2>How it's built</h2>
+        <p>The window is a Neutralinojs app with a JavaScript interface, and a Python engine does the capture. Each kill is counted once: split messages are put back together and repeats are dropped, even when a VPN or a traffic accelerator shows the same traffic twice. Events upload to Athena in batches of 50 or every 10 seconds. If the connection drops, nothing is lost: events are saved to disk and retried every minute, and a war that ends offline still uploads after a restart. It ships as a single portable EXE that bundles its own Python runtime, and it can sit in the tray during the war.</p>
+      </div>
+      <a class="back-link" href="index.html#seer">← All projects</a>
+    </main>
+    <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
+  </div>
+</body>
+</html>

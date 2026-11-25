@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projects — Zenolite</title>
-  <meta name="description" content="Selected projects by Zenolite.">
+  <meta name="description" content="Selected projects by Zenolite: Athena and Seer for Black Desert guilds, ReliCore, AgentPresence and asciify-ps.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/style.css">
   <script type="module" src="../js/cursor.js"></script>
-  <script type="module" src="../js/showcase.js"></script>
+  <script type="module" src="../js/stage.js"></script>
 </head>
 <body>
   <div class="page page--wide">
@@ -20,67 +20,118 @@
       <a href="../notes.html">Notes</a>
       <a href="../contact.html">Contact</a>
     </nav>
-    <main>
+    <main class="stage" data-stage>
       <h1 class="page-title">Projects</h1>
-      <ol class="showcase">
-        <li class="show show--featured">
-          <a class="show-link" href="project-athena.html" data-preview="../assets/projects/project-athena/preview.mp4">
-            <div class="show-media">
-              <img class="show-poster" src="../assets/projects/project-athena/poster.jpg" alt="" width="1280" height="720">
-              <video class="show-video" muted loop playsinline preload="none" aria-hidden="true"></video>
-            </div>
-            <div class="show-info">
-              <h2 class="show-title">Project Athena</h2>
-              <p>Discord bot and web dashboard that runs Black Desert Online guilds: rosters, a live war map and stats read from scoreboard screenshots.</p>
-              <span class="show-meta">TypeScript · Node.js · Discord · Supabase</span>
-            </div>
-          </a>
-        </li>
-        <li class="bento-shot"><a href="project-athena.html"><img src="../assets/projects/project-athena/war-map.jpg" alt="Project Athena live war map" width="1280" height="720"><span>Live war map</span></a></li>
-        <li class="bento-shot"><a href="project-athena.html"><img src="../assets/projects/project-athena/scoreboard-ocr.jpg" alt="Project Athena reading player stats from a scoreboard screenshot" width="1280" height="720"><span>Scoreboard OCR</span></a></li>
-        <li class="bento-shot"><a href="project-athena.html"><img src="../assets/projects/project-athena/stats.jpg" alt="Project Athena player stats page" width="1280" height="720"><span>Player stats</span></a></li>
-        <li class="show">
-          <a class="show-link" href="relicore.html" data-preview="../assets/projects/relicore/preview.mp4">
-            <div class="show-media">
-              <img class="show-poster" src="../assets/projects/relicore/poster.jpg" alt="" width="1280" height="720" style="object-position: 14% 50%">
-              <video class="show-video" muted loop playsinline preload="none" aria-hidden="true"></video>
-            </div>
-            <div class="show-info">
-              <h2 class="show-title">Relicore</h2>
-              <p>Guess where and when real museum artifacts were made, on a world map.</p>
-              <span class="show-meta">Next.js · TypeScript · MapLibre GL</span>
-            </div>
-          </a>
-        </li>
-        <li class="bento-note">
-          <p>I build small, complete tools, then test them the way a QA engineer would.</p>
-          <ul><li>TypeScript</li><li>Next.js</li><li>Node.js</li><li>Supabase</li><li>Rust</li><li>Python</li></ul>
-        </li>
-        <li class="show">
-          <a class="show-link" href="agent-presence.html">
-            <div class="show-media">
-              <img class="show-poster" src="../assets/projects/agent-presence/poster.jpg" alt="" width="1280" height="720">
-            </div>
-            <div class="show-info">
-              <h2 class="show-title">AgentPresence</h2>
-              <p>Shows which AI coding agent you're using as your Discord status.</p>
-              <span class="show-meta">Rust, Discord Rich Presence</span>
-            </div>
-          </a>
-        </li>
-        <li class="show">
-          <a class="show-link" href="asciify-ps.html">
-            <div class="show-media">
-              <img class="show-poster" src="../assets/projects/asciify-ps/poster.jpg" alt="" width="1280" height="720" style="object-position: 0 0">
-            </div>
-            <div class="show-info">
-              <h2 class="show-title">asciify-ps</h2>
-              <p>Windows 2000-style desktop app that turns images into coloured ASCII art.</p>
-              <span class="show-meta">Python, Tkinter</span>
-            </div>
-          </a>
-        </li>
-      </ol>
+
+      <div class="stage-tabs" role="tablist" aria-label="Projects">
+        <button class="stage-tab" role="tab" id="tab-athena" aria-controls="athena" aria-selected="true" style="--tint: #d9b26a">Athena<small>athenabdo.com</small></button>
+        <button class="stage-tab stage-tab--sub" role="tab" id="tab-seer" aria-controls="seer" aria-selected="false" style="--tint: #ff7a3d">Seer<small>seer.athenabdo.com</small></button>
+        <button class="stage-tab" role="tab" id="tab-relicore" aria-controls="relicore" aria-selected="false" style="--tint: #f0a45a">ReliCore<small>web game</small></button>
+        <button class="stage-tab" role="tab" id="tab-agent-presence" aria-controls="agent-presence" aria-selected="false" style="--tint: #8ea6ff">AgentPresence<small>Rust</small></button>
+        <button class="stage-tab" role="tab" id="tab-asciify-ps" aria-controls="asciify-ps" aria-selected="false" style="--tint: #7fd1a8">asciify-ps<small>Python</small></button>
+        <span class="stage-ink" aria-hidden="true"></span>
+      </div>
+
+      <section class="stage-panel" id="athena" role="tabpanel" aria-labelledby="tab-athena" style="--tint: #d9b26a">
+        <div class="stage-view">
+          <div class="stage-screen">
+            <figure class="stage-shot is-active"><img src="../assets/projects/athena/hero.jpg" alt="Athena landing page art: a winged statue in a temple" width="1600" height="900"><figcaption>Landing page</figcaption></figure>
+            <figure class="stage-shot stage-shot--wide"><img src="../assets/projects/athena/stats.webp" alt="Last war summary and the top three players in each stat" width="2200" height="730" loading="lazy"><figcaption>Scoreboards become stats</figcaption></figure>
+            <figure class="stage-shot stage-shot--wide"><img src="../assets/projects/athena/wars.webp" alt="Recent wars with kills, deaths and K/D for each" width="2070" height="940" loading="lazy"><figcaption>Every war on record</figcaption></figure>
+            <figure class="stage-shot"><img src="../assets/projects/athena/map.webp" alt="Kill map of a node war beside the combat feed" width="2120" height="1120" loading="lazy"><figcaption>Kill map</figcaption></figure>
+            <span class="stage-glare" aria-hidden="true"></span>
+          </div>
+          <div class="stage-bar" aria-hidden="true"><span></span></div>
+        </div>
+        <div class="stage-copy">
+          <p class="stage-kicker">Discord bot + web dashboard · 2026</p>
+          <h2 class="stage-title">Athena</h2>
+          <p class="stage-desc">Signups, rosters, stats and kill maps for Black Desert guilds, in Discord. My guild runs its Node Wars on it every week.</p>
+          <ul class="stage-points">
+            <li>Scoreboard screenshots become per-player stats, read by Claude Haiku</li>
+            <li>Rosters with caps, bench overflow and weekly repeats</li>
+            <li>Every war on record, with attendance and K/D</li>
+          </ul>
+          <ul class="stage-stack"><li>TypeScript</li><li>discord.js</li><li>Express</li><li>Supabase</li><li>Railway</li></ul>
+          <p class="stage-links"><a href="project-athena.html">Case study</a><a href="https://athenabdo.com/">athenabdo.com <span aria-hidden="true">↗</span></a></p>
+        </div>
+      </section>
+
+      <section class="stage-panel" id="seer" role="tabpanel" aria-labelledby="tab-seer" style="--tint: #ff7a3d">
+        <div class="stage-view">
+          <div class="stage-screen">
+            <figure class="stage-shot is-active"><img src="../assets/projects/seer/session.webp" alt="Seer recording a node war: a live list of kills and deaths with running K/D" width="2360" height="1520" loading="lazy"><figcaption>A live kill feed</figcaption></figure>
+            <figure class="stage-shot"><img src="../assets/projects/seer/edit.webp" alt="Seer's war editor with quick fixes for guild names" width="2360" height="1520" loading="lazy"><figcaption>Fix a whole war in one click</figcaption></figure>
+            <figure class="stage-shot"><img src="../assets/projects/athena/map.webp" alt="Kills from a Seer recording plotted on the Athena map" width="2120" height="1120" loading="lazy"><figcaption>Every kill on the map</figcaption></figure>
+            <span class="stage-glare" aria-hidden="true"></span>
+          </div>
+          <div class="stage-bar" aria-hidden="true"><span></span></div>
+        </div>
+        <div class="stage-copy">
+          <p class="stage-kicker">Windows companion for Athena · 2026</p>
+          <h2 class="stage-title">Seer</h2>
+          <p class="stage-desc">Records a node war on your PC: every kill and death, with guild and place. When the war ends it uploads to Athena.</p>
+          <ul class="stage-points">
+            <li>A live kill feed with running alliance and enemy K/D</li>
+            <li>Fix a misread name once and the whole war follows</li>
+            <li>Every kill lands on the map, shareable by link</li>
+          </ul>
+          <ul class="stage-stack"><li>Neutralinojs</li><li>JavaScript</li><li>Python</li><li>Npcap</li></ul>
+          <p class="stage-links"><a href="seer.html">Case study</a><a href="https://seer.athenabdo.com/">seer.athenabdo.com <span aria-hidden="true">↗</span></a></p>
+        </div>
+      </section>
+
+      <section class="stage-panel" id="relicore" role="tabpanel" aria-labelledby="tab-relicore" style="--tint: #f0a45a">
+        <div class="stage-view">
+          <div class="stage-screen">
+            <figure class="stage-shot is-active"><video src="../assets/projects/relicore/preview.mp4" poster="../assets/projects/relicore/poster.jpg" muted loop playsinline preload="none" aria-label="ReliCore gameplay"></video><figcaption>Guessing on the map</figcaption></figure>
+            <span class="stage-glare" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="stage-copy">
+          <p class="stage-kicker">Multiplayer web game · 2026</p>
+          <h2 class="stage-title">ReliCore</h2>
+          <p class="stage-desc">Guess where and when real museum artifacts were made, on a world map. Solo, or in lobbies of up to eight players.</p>
+          <ul class="stage-points">
+            <li>287 artifacts from the Met, Cleveland, V&amp;A and Smithsonian</li>
+            <li>Scored by distance and era</li>
+          </ul>
+          <ul class="stage-stack"><li>Next.js</li><li>TypeScript</li><li>Prisma</li><li>MapLibre GL</li></ul>
+          <p class="stage-links"><a href="relicore.html">Case study</a><a href="https://relicore-atlas.vercel.app/">Play <span aria-hidden="true">↗</span></a></p>
+        </div>
+      </section>
+
+      <section class="stage-panel" id="agent-presence" role="tabpanel" aria-labelledby="tab-agent-presence" style="--tint: #8ea6ff">
+        <div class="stage-view">
+          <div class="stage-screen">
+            <figure class="stage-shot is-active"><img src="../assets/projects/agent-presence/poster.jpg" alt="Discord profile showing the AI coding agent in use" width="1280" height="720" loading="lazy"><figcaption>Discord status</figcaption></figure>
+            <span class="stage-glare" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="stage-copy">
+          <p class="stage-kicker">Desktop utility</p>
+          <h2 class="stage-title">AgentPresence</h2>
+          <p class="stage-desc">Shows which AI coding agent you're using as your Discord status.</p>
+          <ul class="stage-stack"><li>Rust</li><li>Discord Rich Presence</li></ul>
+          <p class="stage-links"><a href="agent-presence.html">Case study</a></p>
+        </div>
+      </section>
+
+      <section class="stage-panel" id="asciify-ps" role="tabpanel" aria-labelledby="tab-asciify-ps" style="--tint: #7fd1a8">
+        <div class="stage-view">
+          <div class="stage-screen">
+            <figure class="stage-shot is-active"><img src="../assets/projects/asciify-ps/poster.jpg" alt="asciify-ps window turning a photo into coloured ASCII art" width="1280" height="720" loading="lazy" style="object-position: 0 0"><figcaption>Main window</figcaption></figure>
+            <span class="stage-glare" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="stage-copy">
+          <p class="stage-kicker">Desktop app</p>
+          <h2 class="stage-title">asciify-ps</h2>
+          <p class="stage-desc">Windows 2000-style desktop app that turns images into coloured ASCII art.</p>
+          <ul class="stage-stack"><li>Python</li><li>Tkinter</li></ul>
+          <p class="stage-links"><a href="asciify-ps.html">Case study</a></p>
+        </div>
+      </section>
     </main>
     <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
   </div>
