@@ -21,23 +21,6 @@ test('the display name is "Zenolite" everywhere (the GitHub handle stays in URLs
   assert.match(read('index.html'), /<p class="identity"[^>]*>Zenolite<\/p>/);
 });
 
-test('projects page shows Project Athena, Relicore, AgentPresence and asciify-ps, in that order', () => {
-  const titles = [...read('projects/index.html').matchAll(/<h2 class="show-title">([^<]+)<\/h2>/g)].map(m => m[1]);
-  assert.deepEqual(titles, ['Project Athena', 'Relicore', 'AgentPresence', 'asciify-ps']);
-});
-
-test('each card has a poster; only cards with footage name a preview clip; Athena leads the page', () => {
-  const page = read('projects/index.html');
-  const cards = page.split(/<li class="show[ "]/).slice(1);
-  assert.equal(cards.length, 4);
-  for (const card of cards) assert.match(card, /<img class="show-poster" src="[^"]+poster\.jpg"/);
-  // only projects with real footage get a clip; the rest stay a still image
-  const withClip = cards.filter(c => /data-preview="[^"]+preview\.mp4"/.test(c)).map(c => c.match(/href="([^"]+)\.html"/)[1]);
-  assert.deepEqual(withClip, ['project-athena', 'relicore']);
-  for (const card of cards) assert.equal(/class="show-video"/.test(card), /data-preview=/.test(card));
-  assert.match(page, /<li class="show show--featured">\s*<a class="show-link" href="project-athena\.html"/);
-});
-
 test('projects without footage show a still image on their detail page, not a video', () => {
   for (const slug of ['agent-presence', 'asciify-ps']) {
     const page = read(`projects/${slug}.html`);

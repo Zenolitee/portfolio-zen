@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Project Athena — Zenolite</title>
-  <meta name="description" content="Project Athena: Discord bot and web dashboard for Black Desert Online guilds: Node War rosters, a live war map, scoreboard OCR stats and an idle fishing game.">
+  <title>Athena — Zenolite</title>
+  <meta name="description" content="Athena: a Discord bot and web dashboard for Black Desert guilds. Node War rosters, stats read from scoreboard screenshots, war history and kill maps.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/style.css">
   <script type="module" src="../js/cursor.js"></script>
-  <script type="module" src="../js/showcase.js"></script>
 </head>
 <body>
   <div class="page">
@@ -21,50 +20,50 @@
       <a href="../contact.html">Contact</a>
     </nav>
     <main>
-      <h1 class="detail-title">Project Athena</h1>
-      <p class="detail-summary">Discord bot and web dashboard that runs Black Desert Online guilds, from Node War sign-ups to post-war stats.</p>
+      <h1 class="detail-title">Athena</h1>
+      <p class="detail-summary">Signups, rosters, stats and kill maps for Black Desert guilds, in Discord.</p>
       <dl class="meta-list">
         <dt>Year</dt><dd>2026</dd>
-        <dt>Role</dt><dd>Design &amp; build</dd>
-        <dt>Stack</dt><dd>TypeScript · Node.js · Express · discord.js · Supabase · Gemini API · Railway</dd>
+        <dt>Role</dt><dd>Design, build and test (solo)</dd>
+        <dt>Stack</dt><dd>TypeScript · Node.js · discord.js · Express · Tailwind CSS · Supabase (PostgreSQL) · Claude Haiku · Railway · Playwright</dd>
         <dt>Source</dt><dd>Private repository</dd>
-        <dt>Live</dt><dd><a href="https://project-athene.up.railway.app/">project-athene.up.railway.app <span aria-hidden="true">↗</span></a></dd>
+        <dt>Live</dt><dd><a href="https://athenabdo.com/">athenabdo.com <span aria-hidden="true">↗</span></a></dd>
+        <dt>Companion</dt><dd><a href="seer.html">Seer</a>, the Windows app that records the war</dd>
       </dl>
-      <div class="frame detail-hero"><video src="../assets/projects/project-athena/preview.mp4" poster="../assets/projects/project-athena/poster.jpg" controls muted loop playsinline data-autoplay aria-label="Project Athena preview"></video></div>
+      <div class="frame detail-hero"><img src="../assets/projects/athena/hero.jpg" alt="Athena landing page art: a winged statue in a temple" width="1600" height="900"></div>
       <div class="prose">
-        <p>Project Athena started as a roster bot for Node Wars and grew into the guild's command centre. Officers schedule wars in Discord, members sign up from buttons on the announcement, and after the war the scoreboard screenshot turns into stats on the web dashboard.</p>
+        <p>Athena started as a roster bot for my guild's Node Wars and grew into the place the guild plans, fights and reviews. Officers schedule wars in Discord, members sign up from buttons on the announcement, and after the war the scoreboard screenshot turns into stats on the web dashboard. My guild has run its wars on it every week since.</p>
 
-        <h2>Event manager</h2>
-        <p>Node Wars, Guild Boss Raids and custom events, created from a Discord wizard (buttons, select menus and modals) or the dashboard. Rosters fill groups like Mainball, Defense, Zerker and Shai with capacity presets per war tier, overflow to Bench when a group is full, and repeat weekly. A minute-based scheduler posts them on time, recovers after restarts and never double-posts.</p>
-        <figure class="shot"><img src="../assets/projects/project-athena/events.jpg" alt="Create Event screen with Node War, Guild Boss Raid and Custom Event options" width="1600" height="665" loading="lazy"></figure>
+        <h2>Rosters and events</h2>
+        <p>Node Wars, Guild Boss Raids and custom events, created from a Discord wizard of buttons, select menus and modals. Rosters fill groups like Mainball, Defense, Zerker and Shai with capacity presets per war tier and weekday, overflow to Bench when a group is full, and repeat weekly. A minute-based scheduler posts each event on time, recovers after a restart and never posts twice.</p>
 
-        <h2>Live war map</h2>
-        <p>An interactive map of the whole game world built from in-game combat logs. It plots every kill and death where it happened, with a heatmap, filters by region and node, a timeline you can replay through the war, and a cannon calculator for siege distances. Guilds can share a read-only link.</p>
-        <figure class="shot"><img src="../assets/projects/project-athena/war-map.jpg" alt="War map of the game world with node, city and gateway markers and map controls" width="1180" height="772" loading="lazy"></figure>
+        <h2>Scoreboards become stats</h2>
+        <p>Post the end-of-war scoreboard screenshots on the website or in Discord, and Athena reads every player's kills, deaths, damage and healing, then keeps the leaders for each stat. Reading the numbers was the hardest part of the project. Tesseract kept misreading names and digits on the busy scoreboard, and Gemini Flash-Lite dropped players and misread about 18% of rows. Claude Haiku read every number correctly on 89 real players, so it goes first now, with Gemini and Tesseract as fallbacks and retries for temporary errors.</p>
+        <p>In Discord, an officer drops the screenshots into the channel and the bot replies with what it saved: the result, how many players it read, the date taken from the screenshot, and a link to review or fix the report.</p>
+        <figure class="shot shot--discord"><img src="../assets/projects/athena/ocr-discord.png" alt="Four scoreboard screenshots posted in Discord, and the bot's reply: Node war 2026-10-29, Loss, 40 players saved from 4 screenshots, date read from the screenshot, and a link to review or fix" width="684" height="551" loading="lazy"></figure>
+        <p>On the dashboard each upload becomes a report with the war's K/D, kill streak, damage and fort damage, plus how sure the OCR was, so it can be checked and corrected.</p>
+        <figure class="shot"><img src="../assets/projects/athena/ocr-report.png" alt="Score report for Oct 29, 2026: loss, 40 players, OCR 100%, K/D 705 / 688, streak 6, damage 25M, fort damage 190M" width="996" height="277" loading="lazy"></figure>
+        <figure class="shot"><img src="../assets/projects/athena/stats.webp" alt="Last war summary with the top players for kills, damage and healing, and the top three in each stat" width="2200" height="730" loading="lazy"></figure>
 
-        <h2>Node War stats</h2>
-        <p>Win rate, kills, deaths, damage and K/D per war and per player, with trends against the previous wars, category leaders, class tracking, player search and side-by-side comparisons. Everything exports to CSV.</p>
-        <figure class="shot"><img src="../assets/projects/project-athena/stats.jpg" alt="Guild stats overview: 11 wars, 55% win rate, 3,220 kills and per-war averages" width="1288" height="518" loading="lazy"></figure>
+        <h2>Every war on record</h2>
+        <p>Kills, deaths and K/D for every recorded war, newest first. Duplicate recordings from several officers are grouped automatically, and attendance shows who fought in which war. Player search, class tracking and side-by-side war comparisons sit on top of the same data.</p>
+        <figure class="shot"><img src="../assets/projects/athena/wars.webp" alt="Recent wars list with kills, deaths and K/D, and duplicate recordings grouped" width="2070" height="940" loading="lazy"></figure>
 
-        <h2>Scoreboard OCR</h2>
-        <p>Officers upload the end-of-war scoreboard screenshot and the bot reads every player's numbers with Gemini vision, falling back to Tesseract.js. A separate <code>/ocr</code> command reads in-game chat screenshots in several languages. Each upload lands in a score history that can be reviewed and corrected.</p>
-        <figure class="shot"><img src="../assets/projects/project-athena/scoreboard-ocr.jpg" alt="Score history: a grid of uploaded Node War scoreboards with the numbers read from each" width="1600" height="735" loading="lazy"></figure>
-
-        <h2>Attendance and guild performance</h2>
-        <p>Who showed up to which war, and how the guild's kills, deaths and damage move over time.</p>
-        <div class="image-pair">
-          <figure class="shot"><img src="../assets/projects/project-athena/attendance.jpg" alt="Attendance grid of members against war dates" width="1600" height="499" loading="lazy"></figure>
-          <figure class="shot"><img src="../assets/projects/project-athena/guild-performance.jpg" alt="Guild performance chart of kills, deaths and damage per war" width="1422" height="791" loading="lazy"></figure>
-        </div>
+        <h2>Every kill on the map</h2>
+        <p>When a war is recorded with <a href="seer.html">Seer</a>, the log uploads to Athena when the war ends. Each kill lands on the map at the place it happened, beside the combat feed, and the map can be shared with a link.</p>
+        <figure class="shot"><img src="../assets/projects/athena/map.webp" alt="Map of a node war with each kill marked where it happened, beside the combat feed" width="2120" height="1120" loading="lazy"></figure>
 
         <h2>Fishing game</h2>
         <p>An idle fishing game inside the same bot, based on Black Desert's own fishing system. <code>/fish</code> catches from 302 fish across zones, <code>/sell</code> turns them into silver for better rods, floats and outfits, <code>/enhance</code> upgrades gear with a chance to fail, and <code>/autofish</code> hires a Fisherman who keeps fishing while you're away. Servers can pick a role the bot pings when a sea boss appears.</p>
         <figure class="shot shot--discord"><img src="../assets/projects/project-athena/fishing.png" alt="Discord message from the bot: a Dark-banded Rockfish catch with fishing mastery, silver and Fishdex progress, and Fish and Inventory buttons" width="539" height="279" loading="lazy"></figure>
 
-        <h2>How it's built</h2>
-        <p>One TypeScript app: the discord.js bot and an Express dashboard with Discord login share state through Supabase, deployed on Railway. Tested with Playwright.</p>
+        <h2>Also in the bot</h2>
+        <ul>
+          <li><code>/ocr</code> reads in-game chat screenshots in several languages.</li>
+          <li>Adventurer and guild lookups through the Black Desert community API.</li>
+        </ul>
       </div>
-      <a class="back-link" href="index.html">← All projects</a>
+      <a class="back-link" href="index.html#athena">← All projects</a>
     </main>
     <footer class="site-footer"><p>© 2026 Zenolite</p></footer>
   </div>
